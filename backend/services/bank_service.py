@@ -50,12 +50,14 @@ def transfer_money_service_phone(sender_phone: int, receiver_phone: int, amount:
         return {"error": "Sender user not found "}
 
     expense_data = {
+       "transaction_id": str(random.randint(100000, 999999)),
+        "user_id": sender_user["username"],
+        "to": receiver_account["AccountHolder"],
         "description": description,
         "amount": amount,
         "category": category,
         "date": datetime.now().strftime("%d-%m-%Y"),
         "time": datetime.now().strftime("%H:%M:%S"),
-        "user_id": sender_user["username"],
     }
 
     expense_collection.insert_one(expense_data)

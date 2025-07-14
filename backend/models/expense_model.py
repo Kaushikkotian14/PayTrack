@@ -7,3 +7,5 @@ class ExpenseModel(BaseModel):
     time: str
     category: str
     user_id: str
+    to: str = None  
+

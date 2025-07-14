@@ -18,3 +18,6 @@ def create_user(data: dict):
  
 def delete_user(username: str):
     return user_collection.delete_one({"username": username})
+
+def update_password(username: str, password: str):
+    return user_collection.update_one({"username": username}, {"$set": {"hashed_password": password}})

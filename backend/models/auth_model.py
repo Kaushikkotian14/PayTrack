@@ -9,3 +9,5 @@ class UserModel(BaseModel):
     date: str
     time: str
    
+class UserUpdateModel(BaseModel):
+    password: Optional[str] = None

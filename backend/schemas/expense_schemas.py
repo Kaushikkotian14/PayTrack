@@ -5,6 +5,7 @@ class ExpenseCreate(BaseModel):
     description: str
     amount: float
     category: str
+    to : Optional[str] = None
  
 class ExpenseResponse(ExpenseCreate):
     date: str

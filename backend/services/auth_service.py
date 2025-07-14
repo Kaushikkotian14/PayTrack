@@ -1,4 +1,4 @@
-from repositories.auth_repository import get_user_by_phone, create_user, get_user_by_phone,check_user_bank_account,check_user,get_user_by_username
+from repositories.auth_repository import get_user_by_phone, create_user, get_user_by_phone,check_user_bank_account,check_user,get_user_by_username, get_user_by_phone
 from fastapi import HTTPException
 from database import bank_collection
 from utils.hashing import Hasher
@@ -27,11 +27,11 @@ def register_user(user):
     create_user(data)
     return {"msg": "User registered successfully"}
  
- 
- 
-def authenticate_user(phone: int, password: str):
-    user = get_user_by_username(phone)
-    if user and Hasher.verify_password(password, user["hashed_password"]):
+
+
+def authenticate_user(username:str,  password: str):
+    user = get_user_by_username(username)
+    if user  and Hasher.verify_password(password, user["hashed_password"]):
         return user
     return None
  
