@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.services';
 import { RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -17,14 +18,16 @@ export class LoginComponent {
   username: string = '';
   password: string = '';
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService,private router: Router) {}
 
   login() {
     if (this.username && this.password) {
       this.authService.login(this.username, this.password).subscribe({
         next: () => {
           alert('Login successful:');
-          window.location.href = '/expense';
+          
+          this.router.navigate(['/expense']);
+         
         },
         error: () => {
           alert('Login failed:');

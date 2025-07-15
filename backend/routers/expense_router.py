@@ -12,8 +12,9 @@ async def add_expense(expense: ExpenseCreate, current_user: dict = Depends(get_c
 
 
 @router.get("/expense/{username}")
-async def get_expenses_by_user(username: str, current_user: dict = Depends(get_current_user)):
-    return get_expenses_service(username, current_user)
+async def get_expenses_by_user(current_user: dict = Depends(get_current_user)):
+    username = current_user["username"]
+    return get_expenses_service(username)
 
 @router.put("/expense/{expense_id}")
 async def update_expense(expense_id: str, expense: ExpenseCreate, current_user: dict = Depends(get_current_user)):

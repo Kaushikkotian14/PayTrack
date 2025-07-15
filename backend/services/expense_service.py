@@ -1,6 +1,19 @@
 from repositories.expense_repository import *
 from datetime import datetime
 from fastapi import HTTPException
+import requests
+
+def get_current_location():
+    try:
+        response = requests.get('http://ip-api.com/json/', timeout=5)
+        data = response.json()
+        city = data.get('city', 'Unknown')
+        region = data.get('region', 'Unknown')
+        country = data.get('country', 'Unknown')
+        return f"{city}, {region}, {country}"
+    except Exception as e:
+        print(f"Error getting location: {e}")
+        return "Unknown Location"
  
 def create_expense_service(expense, username):
     data = {
@@ -9,15 +22,14 @@ def create_expense_service(expense, username):
         "category": expense.category,
         "date": datetime.now().strftime("%d-%m-%Y"),
         "time": datetime.now().strftime("%H:%M:%S"),
+        "location": get_current_location(),
         "user_id": username
     }
     insert_expense(data)
     return {"msg": "Expense created successfully"}
 
 
-def get_expenses_service(username:str,current_user: dict):
-    if current_user["username"] != username:
-        raise HTTPException(status_code=403, detail="Not authorized to view these expenses")
+def get_expenses_service(username: str):
    
     expenses = []
     for expense in find_expenses_by_user(username):
@@ -56,20 +68,15 @@ def delete_expense_service(expense_id: str, username: str):
     
 def transfer_amount_service(amount: float, phone: str, username: str):
     try:
-       
         recipient = find_user_by_phone(phone)
         if not recipient:
             raise HTTPException(status_code=404, detail="Recipient user not found")
 
         recipient_phone = recipient["phone"]
-
         sender = find_user_by_username(username)
         if not sender or sender.get("balance", 0) < amount:
             raise HTTPException(status_code=400, detail="Insufficient balance")
-
-        
         update_user_balance(username, -amount)
-
         update_user_balance(recipient_phone, amount)
 
         return {"msg": f"Amount {amount} transferred to {phone} successfully"}

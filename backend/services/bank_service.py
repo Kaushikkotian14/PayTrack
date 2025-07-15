@@ -2,6 +2,7 @@ from repositories.bank_repository import insert_bank_account, find_bank_by_phone
 import random
 from datetime import datetime
 from repositories.auth_repository import get_user_by_phone
+from services.expense_service import get_current_location
 from database import expense_collection
  
 def create_bank_account_service(account):
@@ -58,6 +59,7 @@ def transfer_money_service_phone(sender_phone: int, receiver_phone: int, amount:
         "category": category,
         "date": datetime.now().strftime("%d-%m-%Y"),
         "time": datetime.now().strftime("%H:%M:%S"),
+        "Location": get_current_location()
     }
 
     expense_collection.insert_one(expense_data)
