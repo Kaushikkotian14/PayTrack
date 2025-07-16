@@ -63,7 +63,7 @@ export class ExpenseComponent implements OnInit {
   }
 
   editExpense(expense: Expense): void {
-    // Implement edit functionality (e.g., open a modal or navigate to an edit form)
+
     const updatedExpense: ExpenseCreate = {
       date: expense.date,
       to: expense.to,
