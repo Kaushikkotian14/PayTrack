@@ -11,7 +11,7 @@ export interface Expense {
   description: string;
 category: string;
 time?: string;
-location: string;
+Location: string;
 user_id?: string;
 transaction_id?: string;
   amount: number;

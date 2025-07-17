@@ -15,7 +15,7 @@ import { CommonModule } from '@angular/common';
 export class ExpenseComponent implements OnInit {
   expenses: Expense[] = [];
   filteredExpenses: Expense[] = [];
-  categories: string[] = ['Food', 'Transport', 'Utilities', 'Entertainment', 'Other'];
+  categories: string[] = ['Food', 'Transport', 'Utilities', 'Entertainment','Grocery', 'Other'];
   selectedCategory: string = '';
   searchText: string = '';
   errorMessage: string = '';
@@ -57,6 +57,7 @@ export class ExpenseComponent implements OnInit {
     });
     this.sortByDate();
   }
+
 
   sortByDate(): void {
     this.filteredExpenses.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());

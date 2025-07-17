@@ -9,6 +9,7 @@ URL = 'mysql+pymysql://root:root@localhost/schema_name'
 To create virtual env:python -m venv myenv 
 to enter virtual env:myenv\Scripts\activate
 to install requirements:pip install -r requirements.txt
+freeze requirements: freeze > requirements.txt
 
 i want to show expense for othorize users data with filters of category , latest date wise and also add search option in angular 16 tailwind with services i have fastapi get put post delete methods in it
 
