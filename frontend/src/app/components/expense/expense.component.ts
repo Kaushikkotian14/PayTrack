@@ -49,6 +49,7 @@ export class ExpenseComponent implements OnInit {
   loadExpenses(): void {
     this.expenseService.getExpenses('current_user').subscribe({
       next: (expenses) => {
+        console.log('Loaded expenses:', expenses); // DEBUG
         this.expenses = expenses;
         this.filterExpenses();
         this.sortByDate();
@@ -59,12 +60,26 @@ export class ExpenseComponent implements OnInit {
     });
   }
 
+  // FIXED: Search functionality
   filterExpenses(): void {
+    console.log('Filtering with:', { category: this.selectedCategory, search: this.searchText }); // DEBUG
+    
     this.filteredExpenses = this.expenses.filter(expense => {
-      const matchesCategory = this.selectedCategory ? expense.category === this.selectedCategory : true;
-      const matchesSearch = this.searchText ? expense.description.toLowerCase().includes(this.searchText.toLowerCase()) ||expense.to.toLowerCase().includes(this.searchText.toLowerCase()) : true;
+      // Category filter
+      const matchesCategory = !this.selectedCategory || expense.category === this.selectedCategory;
+      
+      // Search filter - improved logic
+      const searchTerm = this.searchText.trim().toLowerCase();
+      const matchesSearch = !searchTerm || 
+        (expense.description && expense.description.toLowerCase().includes(searchTerm)) ||
+        (expense.to && expense.to.toLowerCase().includes(searchTerm));
+      
+      console.log(`Expense: ${expense.description}, Category Match: ${matchesCategory}, Search Match: ${matchesSearch}`); // DEBUG
+      
       return matchesCategory && matchesSearch;
     });
+    
+    console.log('Filtered expenses:', this.filteredExpenses.length); // DEBUG
     this.sortByDate();
   }
 
@@ -72,7 +87,6 @@ export class ExpenseComponent implements OnInit {
     this.filteredExpenses.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   }
 
-  // NEW: Open add expense dialog
   openAddExpenseDialog(): void {
     this.showExpenseDialog = true;
     this.isEditing = false;
@@ -81,11 +95,10 @@ export class ExpenseComponent implements OnInit {
       description: '',
       amount: 0,
       category: '',
-      date: new Date().toISOString().split('T')[0] // Today's date
+      date: new Date().toISOString().split('T')[0]
     };
   }
 
-  
   editExpense(expense: Expense): void {
     this.showExpenseDialog = true;
     this.isEditing = true;
@@ -99,7 +112,6 @@ export class ExpenseComponent implements OnInit {
     };
   }
 
-
   closeExpenseDialog(): void {
     this.showExpenseDialog = false;
     this.isEditing = false;
@@ -107,10 +119,8 @@ export class ExpenseComponent implements OnInit {
     this.errorMessage = '';
   }
 
-
   saveExpense(): void {
     if (this.isEditing) {
-     
       const updatedExpense: ExpenseCreate = {
         date: this.expenseData.date,
         to: this.expenseData.to,
@@ -130,7 +140,6 @@ export class ExpenseComponent implements OnInit {
         }
       });
     } else {
-      
       const newExpense: ExpenseCreate = {
         date: this.expenseData.date,
         to: this.expenseData.to,
@@ -139,6 +148,7 @@ export class ExpenseComponent implements OnInit {
         amount: this.expenseData.amount
       };
 
+      // FIXED: Use the correct method name
       this.expenseService.createExpense(newExpense).subscribe({
         next: () => {
           this.loadExpenses();
@@ -152,7 +162,6 @@ export class ExpenseComponent implements OnInit {
     }
   }
 
-  
   deleteExpense(expenseId: string): void {
     if (confirm('Are you sure you want to delete this expense?')) {
       this.expenseService.deleteExpense(expenseId).subscribe({
