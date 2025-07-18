@@ -1,7 +1,6 @@
 <div style="min-height:100vh; background:#f0f4ff; padding:16px;">
     <div style="max-width:900px; margin:auto;">
         
-        <!-- Quick Payment Button -->
         <div style="background:white; border-radius:12px; box-shadow:0 2px 8px #ccc; padding:24px; margin-bottom:24px;">
             <div style="display:flex; justify-content:space-between; align-items:center;">
                 <div>
@@ -16,10 +15,8 @@
             </div>
         </div>
 
-        <!-- Payment Dialog -->
         <div *ngIf="showPaymentDialog" style="position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); display:flex; align-items:center; justify-content:center; z-index:50;" (click)="closePaymentDialog()">
-            
-            <!-- Your existing form (when not processing) -->
+ 
             <div *ngIf="!isTransferring && !transferComplete" style="background:white; border-radius:16px; box-shadow:0 2px 16px #bbb; width:100%; max-width:400px; padding:24px; position:relative;" (click)="$event.stopPropagation()">
                 <button (click)="closePaymentDialog()" style="position:absolute; top:16px; right:16px; background:none; border:none; color:#888; font-size:20px; cursor:pointer;">×</button>
                 <h3 style="font-size:22px; font-weight:bold; color:#333; text-align:center;">Send Money</h3>
@@ -56,7 +53,6 @@
                 </form>
             </div>
 
-            <!-- Loading Screen (NEW) -->
             <div *ngIf="isTransferring" style="background:white; border-radius:16px; box-shadow:0 2px 16px #bbb; width:100%; max-width:400px; padding:24px; text-align:center;" (click)="$event.stopPropagation()">
                 <div style="width:60px; height:60px; border:4px solid #f3f3f3; border-top:4px solid #2563eb; border-radius:50%; animation:spin 1s linear infinite; margin:0 auto 20px;"></div>
                 <h3 style="font-size:20px; color:#333;">Processing Payment</h3>
@@ -67,7 +63,6 @@
                 </div>
             </div>
 
-            <!-- Success Screen (NEW) -->
             <div *ngIf="transferComplete" style="background:white; border-radius:16px; box-shadow:0 2px 16px #bbb; width:100%; max-width:400px; padding:24px; text-align:center;" (click)="$event.stopPropagation()">
                 <div style="width:60px; height:60px; background:#10b981; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 20px;">
                     <span style="color:white; font-size:24px;">✓</span>
@@ -84,10 +79,9 @@
             </div>
         </div>
 
-
         <div style="background:white; border-radius:12px; box-shadow:0 2px 8px #ccc; padding:24px;">
             <h3 style="font-size:20px; font-weight:600; color:#333; margin-bottom:16px;">Dashboard Overview</h3>
-            <p style="color:#666;">Your expense tracking dashboard will appear here...</p>
+            <app-dashboard></app-dashboard>
         </div>
     </div>
 </div>

@@ -37,7 +37,7 @@ export class ExpenseService {
   constructor(private http: HttpClient) {}
 
   private getHeaders(): HttpHeaders {
-    const token = localStorage.getItem('token'); // Adjust based on where you store the token
+    const token = localStorage.getItem('token');
     return new HttpHeaders({
       'Authorization': token ? `Bearer ${token}` : '',
       'Content-Type': 'application/json'
@@ -45,13 +45,14 @@ export class ExpenseService {
   }
 
   getExpenses(username: string): Observable<Expense[]> {
-    return this.http.get<Expense[]>(`${this.apiUrl}/${username}`, { headers: this.getHeaders() }).pipe(
+    return this.http.get<Expense[]>(`${this.apiUrl}`, { headers: this.getHeaders() }).pipe(
       catchError(this.handleError)
     );
   }
 
   createExpense(expense: ExpenseCreate): Observable<Expense> {
-    return this.http.post<Expense>(this.apiUrl, expense, { headers: this.getHeaders() }).pipe(
+    console.log('Sending expense data:', expense);
+    return this.http.post<Expense>(`${this.apiUrl}`, expense, { headers: this.getHeaders() }).pipe(
       catchError(this.handleError)
     );
   }

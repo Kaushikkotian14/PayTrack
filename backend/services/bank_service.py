@@ -18,6 +18,8 @@ def create_bank_account_service(account):
         "AccountHolder": account.name,
         "pan_no": account.pan_no,
         "phone": account.phone,
+        "age": account.age,
+        "EmploymentStatus": account.employment_status,
         "email": account.email,
         "account_type": account.account_type,
         "address": account.address,

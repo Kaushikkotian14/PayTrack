@@ -2,12 +2,13 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PaymentService } from '../../services/payment.service';
+import { DashboardComponent } from '../dashboard/dashboard.component';
 
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, DashboardComponent],
   templateUrl: './home.component.html'
 })
 export class HomeComponent {
@@ -46,7 +47,7 @@ export class HomeComponent {
   initiateTransfer() {
     this.isTransferring = true;
     
-    // Wait 3 seconds then call API
+    
     setTimeout(() => {
       this.paymentService.sendPayment(this.transferRequest).subscribe({
         next: (response) => {
@@ -59,6 +60,6 @@ export class HomeComponent {
           alert('Payment failed!');
         }
       });
-    }, 3000);
+    }, 2000);
   }
 }

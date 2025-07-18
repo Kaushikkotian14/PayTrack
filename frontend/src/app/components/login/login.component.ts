@@ -26,7 +26,7 @@ export class LoginComponent {
         next: () => {
           alert('Login successful:');
           
-          this.router.navigate(['/expense']);
+          this.router.navigate(['/home']);
          
         },
         error: () => {

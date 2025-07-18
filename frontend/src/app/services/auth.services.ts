@@ -41,10 +41,8 @@ export class AuthService {
 
     return this.http.post<LoginResponse>(`${this.apiUrl}/login`, formData).pipe(
       tap(response => {
-        // Save token and user data to localStorage after successful login
         localStorage.setItem('token', response.access_token);
         localStorage.setItem('user', JSON.stringify(response.user));
-        console.log('Login successful, data saved to localStorage');
       })
     );
   }

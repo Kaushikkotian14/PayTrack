@@ -17,6 +17,7 @@ def get_current_location():
  
 def create_expense_service(expense, username):
     data = {
+        "to": expense.to,
         "description": expense.description,
         "amount": expense.amount,
         "category": expense.category,

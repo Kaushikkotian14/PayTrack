@@ -1,8 +1,15 @@
 <div class="max-w-5xl mx-auto p-8 bg-white rounded-2xl shadow-2xl mt-10 border border-blue-100">
-  <h2 class="text-4xl font-extrabold mb-8 text-center text-blue-900 tracking-tight drop-shadow">My Expenses</h2>
+
 
   <div *ngIf="errorMessage" class="text-red-600 text-center mb-4 font-semibold bg-red-50 border border-red-200 rounded-lg py-2">
     {{ errorMessage }}
+  </div>
+
+
+  <div class="text-right mb-6">
+    <button (click)="openAddExpenseDialog()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold shadow-lg transition border border-blue-500">
+      + Add Expense
+    </button>
   </div>
 
   <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-10">
@@ -29,7 +36,7 @@
       
       <div class="space-y-1">
         <h3 class="text-lg font-bold text-blue-900">To: {{expense.to}}</h3>
-        <p class="text-sm text-gray-700"><span class="font-bold text-gray-600">Transaction ID:</span> {{expense.transaction_id}}</p>
+        <p *ngIf="expense.transaction_id" class="text-sm text-gray-700"><span class="font-bold text-gray-600">Transaction ID:</span> {{expense.transaction_id}}</p>
         <p class="text-sm text-gray-700"><span class="font-bold text-gray-600">Description:</span> {{expense.description}}</p>
         <p *ngIf="expense.Location" class="text-sm text-blue-600 mt-1">
           <i class="fa fa-location-dot mr-1"></i> {{expense.Location}}
@@ -39,22 +46,86 @@
       <div class="flex items-center justify-between mt-5">
         <span class="text-2xl font-extrabold text-green-600 drop-shadow-sm">₹{{expense.amount}}</span>
         <div class="flex gap-2">
-          <button (click)="editExpense(expense)" class="bg-yellow-400 text-white px-3 py-1.5 rounded-lg hover:bg-yellow-500 transition font-semibold shadow border border-yellow-300 flex items-center gap-1">
-            <i class="fa fa-pen"></i>
-          </button>
-          <button (click)="deleteExpense(expense.expense_id)" class="bg-red-500 text-white px-3 py-1.5 rounded-lg hover:bg-red-600 transition font-semibold shadow border border-red-400 flex items-center gap-1">
-            <i class="fa fa-trash"></i>
-          </button>
+            <ng-container *ngIf="!expense.transaction_id">
+            <button (click)="editExpense(expense)" class="bg-yellow-400 text-white px-3 py-1.5 rounded-lg hover:bg-yellow-500 transition font-semibold shadow border border-yellow-300 flex items-center gap-1">
+              <i class="fa fa-pen"></i>
+            </button>
+            <button (click)="deleteExpense(expense.expense_id)" class="bg-red-500 text-white px-3 py-1.5 rounded-lg hover:bg-red-600 transition font-semibold shadow border border-red-400 flex items-center gap-1">
+              <i class="fa fa-trash"></i>
+            </button>
+            </ng-container>
+         
         </div>
       </div>
     </div>
     
-
     <div *ngIf="filteredExpenses.length === 0" class="col-span-full text-center text-gray-400 py-12 text-xl font-semibold bg-blue-50 rounded-xl border border-blue-100 mb-12">
       <svg class="mx-auto mb-3 w-10 h-10 text-blue-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2a4 4 0 018 0v2M9 17a4 4 0 01-8 0v-2a4 4 0 018 0v2zm0 0v2a4 4 0 008 0v-2m-8 0a4 4 0 018 0"></path>
       </svg>
       No expenses found.
+      <br>
+      <button (click)="openAddExpenseDialog()" class="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-semibold transition">
+        Add Your First Expense
+      </button>
+    </div>
+  </div>
+
+
+  <div *ngIf="showExpenseDialog" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" (click)="closeExpenseDialog()">
+    <div class="bg-white rounded-2xl w-full max-w-md p-8 relative shadow-2xl border border-blue-100" (click)="$event.stopPropagation()">
+      <button (click)="closeExpenseDialog()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-2xl font-bold">×</button>
+      
+      <h3 class="text-2xl font-bold text-center text-blue-900 mb-6">
+        {{ isEditing ? 'Edit Expense' : 'Add Expense' }}
+      </h3>
+      
+      <form (ngSubmit)="saveExpense()" #expenseForm="ngForm">
+        <div class="mb-4">
+          <label class="block text-blue-900 font-semibold mb-2">To</label>
+          <input type="text" [(ngModel)]="expenseData.to" name="to" required 
+                 class="w-full px-4 py-2 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 bg-blue-50">
+        </div>
+        
+        <div class="mb-4">
+          <label class="block text-blue-900 font-semibold mb-2">Description</label>
+          <input type="text" [(ngModel)]="expenseData.description" name="description" required 
+                 class="w-full px-4 py-2 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 bg-blue-50">
+        </div>
+        
+        <div class="mb-4">
+          <label class="block text-blue-900 font-semibold mb-2">Amount (₹)</label>
+          <input type="number" [(ngModel)]="expenseData.amount" name="amount" required min="1" 
+                 class="w-full px-4 py-2 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 bg-blue-50">
+        </div>
+        
+        <div class="mb-4">
+          <label class="block text-blue-900 font-semibold mb-2">Category</label>
+          <select [(ngModel)]="expenseData.category" name="category" required 
+                  class="w-full px-4 py-2 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 bg-blue-50">
+            <option value="">Select Category</option>
+            <option value="Food">Food</option>
+            <option value="Bills">Bills</option>
+            <option value="Transport">Transport</option>
+            <option value="Utilities">Utilities</option>
+            <option value="Entertainment">Entertainment</option>
+            <option value="Grocery">Grocery</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        
+        <div class="mb-6">
+          <label class="block text-blue-900 font-semibold mb-2">Date</label>
+          <input type="date" [(ngModel)]="expenseData.date" name="date" required 
+                 class="w-full px-4 py-2 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 bg-blue-50">
+        </div>
+        
+        <button type="submit" [disabled]="!expenseForm.valid" 
+                class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition shadow-lg border border-blue-500"
+                [class.opacity-50]="!expenseForm.valid">
+          {{ isEditing ? 'Update Expense' : 'Add Expense' }}
+        </button>
+      </form>
     </div>
   </div>
 </div>
