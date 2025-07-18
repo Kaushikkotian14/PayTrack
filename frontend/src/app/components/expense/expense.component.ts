@@ -15,7 +15,7 @@ import { CommonModule } from '@angular/common';
 export class ExpenseComponent implements OnInit {
   expenses: Expense[] = [];
   filteredExpenses: Expense[] = [];
-  categories: string[] = ['Food', 'Transport', 'Utilities', 'Entertainment','Grocery', 'Other'];
+  categories: string[] = ['Food', 'Bills', 'Transport', 'Utilities', 'Entertainment', 'Grocery', 'Other'];
   selectedCategory: string = '';
   searchText: string = '';
   errorMessage: string = '';
@@ -49,10 +49,7 @@ export class ExpenseComponent implements OnInit {
   filterExpenses(): void {
     this.filteredExpenses = this.expenses.filter(expense => {
       const matchesCategory = this.selectedCategory ? expense.category === this.selectedCategory : true;
-      const matchesSearch = this.searchText
-        ? expense.description.toLowerCase().includes(this.searchText.toLowerCase()) ||
-          expense.to.toLowerCase().includes(this.searchText.toLowerCase())
-        : true;
+      const matchesSearch = this.searchText ? expense.description.toLowerCase().includes(this.searchText.toLowerCase()) ||expense.to.toLowerCase().includes(this.searchText.toLowerCase()) : true;
       return matchesCategory && matchesSearch;
     });
     this.sortByDate();

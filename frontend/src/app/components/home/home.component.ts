@@ -1,13 +1,64 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { PaymentService } from '../../services/payment.service';
+
 
 @Component({
-  selector: 'app-expense',
+  selector: 'app-home',
   standalone: true,
-  imports: [CommonModule],
-  templateUrl: './expense.component.html',
-  styleUrls: ['./expense.component.css']
+  imports: [CommonModule, FormsModule],
+  templateUrl: './home.component.html'
 })
-export class ExpenseComponent {
+export class HomeComponent {
+  
+  showPaymentDialog = false;
+  isTransferring = false;
+  transferComplete = false;
+  loadingMessage = 'Processing payment...';
+  transactionId = '';
+  
+  transferRequest = {
+    receiver_phone: 0,
+    amount: 0,
+    description: '',
+    category: ''
+  };
 
+  constructor(private paymentService: PaymentService) {}
+
+  openPaymentDialog() {
+    this.showPaymentDialog = true;
+  }
+
+  closePaymentDialog() {
+    this.showPaymentDialog = false;
+    this.isTransferring = false;
+    this.transferComplete = false;
+    this.transferRequest = {
+      receiver_phone: 0,
+      amount: 0,
+      description: '',
+      category: ''
+    };
+  }
+
+  initiateTransfer() {
+    this.isTransferring = true;
+    
+    // Wait 3 seconds then call API
+    setTimeout(() => {
+      this.paymentService.sendPayment(this.transferRequest).subscribe({
+        next: (response) => {
+          this.isTransferring = false;
+          this.transferComplete = true;
+          this.transactionId = 'TXN' + Date.now();
+        },
+        error: (error) => {
+          this.isTransferring = false;
+          alert('Payment failed!');
+        }
+      });
+    }, 3000);
+  }
 }
