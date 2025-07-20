@@ -1,0 +1,38 @@
+<h2 class="text-2xl font-bold mb-4">Pending Loan Applications</h2>
+<table class="min-w-full bg-white border border-gray-200 rounded-lg shadow mb-8">
+    <thead>
+        <tr class="bg-gray-100">
+            <th class="py-2 px-4 border-b">Name</th>
+            <th class="py-2 px-4 border-b">Phone</th>
+            <th class="py-2 px-4 border-b">Amount</th>
+            <th class="py-2 px-4 border-b">PAN</th>
+            <th class="py-2 px-4 border-b">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let loan of loans" class="hover:bg-gray-50">
+            <td class="py-2 px-4 border-b">{{ loan.name }}</td>
+            <td class="py-2 px-4 border-b">{{ loan.phone }}</td>
+            <td class="py-2 px-4 border-b">{{ loan.amount }}</td>
+            <td class="py-2 px-4 border-b">{{ loan.pan }}</td>
+            <td class="py-2 px-4 border-b space-x-2">
+                <button (click)="approve(loan.id)" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">Approve</button>
+                <button (click)="reject(loan.id)" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Reject</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<h2 class="text-2xl font-bold mb-4">Search User</h2>
+<div class="flex items-center mb-4 space-x-2">
+    <input [(ngModel)]="phone" placeholder="Enter Phone Number" class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+    <button (click)="searchUser()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Search</button>
+</div>
+
+<div *ngIf="user" class="bg-gray-50 p-4 rounded shadow">
+    <h3 class="text-xl font-semibold mb-2">User Info</h3>
+    <p class="mb-1">Name: <span class="font-medium">{{ user.AccountHolder }}</span></p>
+    <p class="mb-1">Email: <span class="font-medium">{{ user.email }}</span></p>
+    <p class="mb-1">Balance: <span class="font-medium">₹{{ user.balance }}</span></p>
+    <p class="mb-1">Credit Score: <span class="font-medium">{{ user.credit_score }}</span></p>
+</div>

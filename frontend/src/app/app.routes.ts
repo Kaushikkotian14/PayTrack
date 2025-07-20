@@ -21,6 +21,14 @@ export const routes: Routes = [
     {
         path: 'home',
         loadComponent: () => import('./components/home/home.component').then(m => m.HomeComponent)
+    },
+    {
+        path:'bank',
+        loadComponent: () => import('./bank/bank.component').then(m => m.BankComponent)
+    },
+    {
+        path: 'loan-apply',
+        loadComponent: () => import('./loan-apply/loan-apply.component').then(m => m.LoanApplyComponent)
     }
 
 ];
