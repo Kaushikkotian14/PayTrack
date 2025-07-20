@@ -23,6 +23,7 @@ def register_user(user):
         "hashed_password": Hasher.get_password_hash(user.password),
         "date": datetime.now().strftime("%d-%m-%Y"),
         "time": datetime.now().strftime("%H:%M:%S"),
+         "role": "user"
     }
     create_user(data)
     return {"msg": "User registered successfully"}
