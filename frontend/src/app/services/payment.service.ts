@@ -33,7 +33,7 @@ export class PaymentService {
     });
   }
 
-  // Send money via phone number using your bank router
+  
   sendPayment(transferRequest: TransferRequest): Observable<TransferResponse> {
     const params = new URLSearchParams({
       receiver_phone: transferRequest.receiver_phone.toString(),
@@ -42,9 +42,7 @@ export class PaymentService {
       category: transferRequest.category
     });
 
-    return this.http.post<TransferResponse>(
-      `${this.apiUrl}/transfer/phone?${params.toString()}`, 
-      {}, // Empty body since we're using query parameters
+    return this.http.post<TransferResponse>( `${this.apiUrl}/transfer/phone?${params.toString()}`,{},
       { headers: this.getHeaders() }
     );
   }

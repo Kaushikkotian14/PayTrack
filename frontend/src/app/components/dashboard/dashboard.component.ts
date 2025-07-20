@@ -1,40 +1,40 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DashboardService } from '../../services/dashboard.service';
+import { Chart as ChartJS, registerables } from 'chart.js';
+
+ChartJS.register(...registerables);
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './dashboard.component.html'
+  templateUrl: './dashboard.component.html',
 })
-export class DashboardComponent implements OnInit {
-  
+export class DashboardComponent implements OnInit, AfterViewInit {
   expenses: any[] = [];
   isLoading = false;
-  showExpenseDialog = false;
-  isEditing = false;
-  currentExpenseId = '';
-  
-
   totalExpenses = 0;
   monthlyExpenses = 0;
   totalTransactions = 0;
   averageDaily = 0;
-  
-  expenseData = {
-    to: '',
-    description: '',
-    amount: 0,
-    category: '',
-    date: ''
-  };
+  limitValue = 0;
 
+  
   constructor(private dashboardService: DashboardService) {}
 
   ngOnInit() {
+  this.dashboardService.getBalance().subscribe({
+    next: (balance) => {
+      this.limitValue = balance;
+    }
+   });
     this.loadExpenses();
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => this.renderCharts(), 500);
   }
 
   loadExpenses() {
@@ -43,66 +43,175 @@ export class DashboardComponent implements OnInit {
       next: (data) => {
         this.expenses = data;
         this.calculateSummary();
+        this.renderCharts();
         this.isLoading = false;
       },
-      error: (error) => {
-        console.error('Error loading expenses:', error);
+      error: () => {
         this.isLoading = false;
       }
     });
   }
 
   calculateSummary() {
-  // Make sure expenses is an array
-  if (!Array.isArray(this.expenses)) {
-    this.expenses = [];
+    this.totalExpenses = 0;
+    this.monthlyExpenses = 0;
+    this.totalTransactions = this.expenses.length;
+    const now = new Date();
+    const currentMonth = now.getMonth();
+    const currentYear = now.getFullYear();
+    const currentDay = now.getDate();
+
+    this.expenses.forEach(e => {
+      const amount = parseFloat(e.amount) || 0;
+      this.totalExpenses += amount;
+      if (e.date) {
+        const [day, month, year] = e.date.split('-').map(Number);
+        if (month - 1 === currentMonth && year === currentYear) {
+          this.monthlyExpenses += amount;
+        }
+      }
+    });
+
+    this.averageDaily = currentDay > 0 ? Math.round(this.monthlyExpenses / currentDay) : 0;
   }
-  
-  // Calculate total expenses
-  this.totalExpenses = this.expenses.reduce((sum, expense) => {
-    return sum + (parseFloat(expense.amount) || 0);
-  }, 0);
-  
-  this.totalTransactions = this.expenses.length;
-  
-  // Get current date info
-  const now = new Date();
-  const currentMonth = now.getMonth(); // 0-11 (January = 0)
-  const currentYear = now.getFullYear();
-  const currentDayOfMonth = now.getDate();
-  
-  // Calculate monthly expenses with DD-MM-YYYY format parsing
-  this.monthlyExpenses = this.expenses
-    .filter(expense => {
-      if (!expense.date) return false;
-      
-      // Parse DD-MM-YYYY format (like "18-07-2025")
-      const dateParts = expense.date.split('-');
-      if (dateParts.length !== 3) return false;
-      
-      const day = parseInt(dateParts[0]);
-      const month = parseInt(dateParts[1]) - 1; // -1 because JavaScript months are 0-11
-      const year = parseInt(dateParts[2]);
-      
-      // Create date object
-      const expenseDate = new Date(year, month, day);
-      
-      // Check if date is valid
-      if (isNaN(expenseDate.getTime())) return false;
-      
-      const expenseMonth = expenseDate.getMonth();
-      const expenseYear = expenseDate.getFullYear();
-      
-      return expenseMonth === currentMonth && expenseYear === currentYear;
-    })
-    .reduce((sum, expense) => sum + (parseFloat(expense.amount) || 0), 0);
-  
-  // Calculate average daily
-  if (currentDayOfMonth > 0 && this.monthlyExpenses > 0) {
-    this.averageDaily = Math.round(this.monthlyExpenses / currentDayOfMonth);
-  } else {
-    this.averageDaily = 0;
+
+  renderCharts() {
+    this.renderMonthlyChart();
+    this.renderCategoryChart();
+    this.renderDailyLineChart();
+    this.renderLimitRadialChart();
   }
-}
-  
+
+  renderMonthlyChart() {
+    const monthlyData = Array(12).fill(0);
+    this.expenses.forEach(exp => {
+      if (exp.date) {
+        const [day, month, year] = exp.date.split('-').map(Number);
+        monthlyData[month - 1] += parseFloat(exp.amount) || 0;
+      }
+    });
+
+    new ChartJS('monthlyBarChart', {
+      type: 'bar',
+      data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun','Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        datasets: [{
+          label: 'Monthly Expenses',
+          data: monthlyData,
+          backgroundColor: '#3b82f6'
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
+  }
+
+  renderCategoryChart() {
+    const categoryMap: { [key: string]: number } = {};
+    this.expenses.forEach(exp => {
+      const category = exp.category || 'Others';
+      categoryMap[category] = (categoryMap[category] || 0) + (parseFloat(exp.amount) || 0);
+    });
+
+    new ChartJS('categoryDoughnut', {
+      type: 'doughnut',
+      data: {
+        labels: Object.keys(categoryMap),
+        datasets: [{
+          label: 'Expenses by Category',
+          data: Object.values(categoryMap),
+          backgroundColor: ['#f87171', '#60a5fa', '#34d399', '#fbbf24', '#c084fc']
+        }]
+      },
+      options: {
+        responsive: true,
+        cutout: '50%', 
+        plugins: {
+          legend: {
+            position: 'right',
+            align: 'center'
+          }
+        }
+      }
+    });
+  }
+
+  renderDailyLineChart() {
+    const dailyTotals: { [day: number]: number } = {};
+    const now = new Date();
+    const currentMonth = now.getMonth();
+    const currentYear = now.getFullYear();
+
+    this.expenses.forEach(exp => {
+      if (exp.date) {
+        const [dayStr, monthStr, yearStr] = exp.date.split('-');
+        const day = parseInt(dayStr);
+        const month = parseInt(monthStr) - 1;
+        const year = parseInt(yearStr);
+        if (month === currentMonth && year === currentYear) {
+          dailyTotals[day] = (dailyTotals[day] || 0) + (parseFloat(exp.amount) || 0);
+        }
+      }
+    });
+
+    const days = Array.from({ length: 31 }, (_, i) => i + 1);
+    const lineData = days.map(d => dailyTotals[d] || 0);
+
+    new ChartJS('dailyLineChart', {
+      type: 'line',
+      data: {
+        labels: days,
+        datasets: [{
+          label: 'Daily Expense (This Month)',
+          data: lineData,
+          borderColor: '#6366f1',
+          backgroundColor: '#c7d2fe',
+          tension: 0.4,
+          fill: true
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
+  }
+
+  renderLimitRadialChart() {
+    const value = this.totalExpenses;
+    const max = this.limitValue;
+
+    new ChartJS('limitRadialChart', {
+      type: 'doughnut',
+      data: {
+        labels: ['Used', 'Remaining'],
+        datasets: [{
+          data: [value, Math.max(0, max - value)],
+          backgroundColor: ['#f87171', '#e5e7eb'],
+          borderWidth: 0,
+          circumference: 180,
+          rotation: -90
+        }]
+      },
+      options: {
+        responsive: true,
+        cutout: '80%',
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: function (ctx) {
+                return `${ctx.label}: ₹${ctx.parsed}`;
+              }
+            }
+          }
+        }
+      }
+    });
+  }
 }

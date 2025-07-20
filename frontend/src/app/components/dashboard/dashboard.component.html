@@ -1,23 +1,50 @@
-<div style="min-height:100vh; background:#f0f4ff; padding:16px;">
-    <div style="max-width:1200px; margin:auto;">
-        
+<div class="min-h-screen bg-[#f0f4ff] p-4">
+  <div class="max-w-[1200px] mx-auto">
+
+   
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+      <div class="bg-white p-5 rounded-xl shadow-md">
+        <h3 class="text-gray-500 text-sm">Total Expenses</h3>
+        <p class="text-2xl font-bold text-blue-600">₹{{ totalExpenses }}</p>
+      </div>
+      <div class="bg-white p-5 rounded-xl shadow-md">
+        <h3 class="text-gray-500 text-sm">This Month</h3>
+        <p class="text-2xl font-bold text-green-500">₹{{ monthlyExpenses }}</p>
+      </div>
+      <div class="bg-white p-5 rounded-xl shadow-md">
+        <h3 class="text-gray-500 text-sm">Average Daily</h3>
+        <p class="text-2xl font-bold text-yellow-500">₹{{ averageDaily }}</p>
+      </div>
+    </div>
 
 
-        <!-- Summary Cards -->
-        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:16px; margin-bottom:24px;">
-            <div style="background:white; padding:20px; border-radius:12px; box-shadow:0 2px 8px #ccc;">
-                <h3 style="color:#666; font-size:14px; margin:0;">Total Expenses</h3>
-                <p style="font-size:24px; font-weight:bold; color:#2563eb; margin:8px 0 0;">₹{{ totalExpenses }}</p>
-            </div>
-            <div style="background:white; padding:20px; border-radius:12px; box-shadow:0 2px 8px #ccc;">
-                <h3 style="color:#666; font-size:14px; margin:0;">This Month</h3>
-                <p style="font-size:24px; font-weight:bold; color:#10b981; margin:8px 0 0;">₹{{ monthlyExpenses }}</p>
-            </div>
+    <div class="bg-white p-4 rounded-xl shadow-md mb-6">
+      <h2 class="text-lg font-semibold text-gray-600 mb-3">Monthly Expense Chart</h2>
+      <canvas id="monthlyBarChart" height="60"></canvas>
+    </div>
 
-            <div style="background:white; padding:20px; border-radius:12px; box-shadow:0 2px 8px #ccc;">
-                <h3 style="color:#666; font-size:14px; margin:0;">Average Daily</h3>
-                <p style="font-size:24px; font-weight:bold; color:#f59e0b; margin:8px 0 0;">₹{{ averageDaily }}</p>
+   
+    <div class="bg-white p-4 rounded-xl shadow-md mb-6">
+      <h2 class="text-lg font-semibold text-gray-600 mb-3">Daily Expenses (Line Chart)</h2>
+      <canvas id="dailyLineChart" height="60"></canvas>
+    </div>
+
+   
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        <div class="bg-white p-4 rounded-xl shadow-md">
+            <h2 class="text-lg font-semibold text-gray-600 mb-3">Category-wise Expense</h2>
+            <div class="flex justify-center items-center" style="height: 180px;">
+                <canvas id="categoryDoughnut" width="250" height="150" style="display:block;"></canvas>
             </div>
         </div>
+        <div class="bg-white p-4 rounded-xl shadow-md">
+            <h2 class="text-lg font-semibold text-gray-600 mb-3">Limit Tracker</h2>
+            <div class="flex justify-center items-center" style="height: 180px;">
+                <canvas id="limitRadialChart" width="250" height="150" style="display:block;"></canvas>
+            </div>
+        </div>
+    </div>
 
-        <!-- Add New Expense Button -->
+  </div>
+</div>
