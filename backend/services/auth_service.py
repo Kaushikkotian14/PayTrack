@@ -29,7 +29,6 @@ def register_user(user):
     return {"msg": "User registered successfully"}
  
 
-
 def authenticate_user(username:str,  password: str):
     user = get_user_by_username(username)
     if user  and Hasher.verify_password(password, user["hashed_password"]):

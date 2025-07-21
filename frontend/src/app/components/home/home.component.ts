@@ -3,12 +3,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PaymentService } from '../../services/payment.service';
 import { DashboardComponent } from '../dashboard/dashboard.component';
+import{RouterLink} from '@angular/router';
 
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, FormsModule, DashboardComponent],
+  imports: [CommonModule, FormsModule, DashboardComponent , RouterLink],
   templateUrl: './home.component.html'
 })
 export class HomeComponent {

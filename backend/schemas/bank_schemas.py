@@ -7,6 +7,8 @@ class BankAccount(BaseModel):
     phone: int
     pan_no: str
     email: str
+    age: int
+    employment_status: str
     account_type: str
     address: str
     balance: float

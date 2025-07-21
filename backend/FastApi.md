@@ -7,7 +7,7 @@ For sql:pip install fastapi uvicorn sqlalchemy pymysql
 URL = 'mysql+pymysql://root:root@localhost/schema_name'
 
 To create virtual env:python -m venv myenv 
-to enter virtual env:myenv\Scripts\activate
+to enter virtual env: myenv\Scripts\activate
 to install requirements:pip install -r requirements.txt
 freeze requirements: freeze > requirements.txt
 

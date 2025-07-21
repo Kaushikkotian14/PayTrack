@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { LoanService } from '../services/loan.service';
+import { LoanService } from '../../services/loan.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 @Component({
@@ -13,7 +13,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class BankComponent implements OnInit {
   loans: any[] = [];
-  phone = '';
+  phone = 0;
   user: any;
 
   constructor(private loanService: LoanService) {}
@@ -34,7 +34,10 @@ export class BankComponent implements OnInit {
     this.loanService.rejectLoan(id).subscribe(() => this.loadPendingLoans());
   }
 
-  searchUser() {
-    this.loanService.getUserByPhone(this.phone).subscribe(data => this.user = data);
-  }
+ searchUser() {
+  this.loanService.getUserByPhone(this.phone).subscribe(
+    (res) => this.user = res,
+    (err) => console.error(err)
+  );
+}
 }

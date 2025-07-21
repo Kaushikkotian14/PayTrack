@@ -68,3 +68,4 @@ def transfer_money_service_phone(sender_phone: int, receiver_phone: int, amount:
 
     return {"msg": "Transfer successful", "amount": amount}
 
+

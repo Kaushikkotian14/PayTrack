@@ -15,6 +15,20 @@
             </div>
         </div>
 
+        <div style="background:white; border-radius:12px; box-shadow:0 2px 8px #ccc; padding:24px; margin-bottom:24px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+                <h2 style="font-size:24px; font-weight:600; color:#333; margin-bottom:8px;">
+                Apply Loan
+                </h2>
+                <p style="color:#666;">Apply instantly for a personal loan</p>
+            </div>
+            <button [routerLink]="['/loan-apply']" style="background:#2563eb; color:white; font-weight:600; padding:12px 32px; border-radius:8px; border:none; cursor:pointer;">
+                Apply Now
+            </button>
+            </div>
+        </div>
+
         <div *ngIf="showPaymentDialog" style="position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); display:flex; align-items:center; justify-content:center; z-index:50;" (click)="closePaymentDialog()">
  
             <div *ngIf="!isTransferring && !transferComplete" style="background:white; border-radius:16px; box-shadow:0 2px 16px #bbb; width:100%; max-width:400px; padding:24px; position:relative;" (click)="$event.stopPropagation()">

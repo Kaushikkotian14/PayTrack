@@ -29,9 +29,14 @@ def reject(loan_id: str, user: dict = Depends(require_role(["admin"]))):
     return reject_loan_by_id(loan_id, user)
 
 @router.get("/user/{phone}")
-def get_user(phone: int, user: dict = Depends(require_role(["admin", "user"]))):
+def get_user(phone: int, user: dict = Depends(require_role(["admin"]))):
     return search_user(phone)
 
 @router.get("/users")
 def get_all_users(user: dict = Depends(require_role(["admin"]))):
     return fetch_all_users()
+
+@router.get("/test-token")
+def test_token(user: dict = Depends(require_role(["admin","user"]))):
+    user["_id"] = str(user["_id"])
+    return {"msg": "Token accepted", "user": user}

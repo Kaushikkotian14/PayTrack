@@ -11,3 +11,4 @@ class UserModel(BaseModel):
    
 class UserUpdateModel(BaseModel):
     password: Optional[str] = None
+

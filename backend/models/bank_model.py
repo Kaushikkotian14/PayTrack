@@ -6,9 +6,12 @@ class BankModel(BaseModel):
     pan_no: str
     phone: int
     email: str
+    age: int
+    employment_status: str
     account_type: str
     address: str
     balance: float
+   
 
 class TransferModel(BaseModel):
     sender_phone: int

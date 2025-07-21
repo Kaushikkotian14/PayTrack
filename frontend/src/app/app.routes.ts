@@ -24,11 +24,11 @@ export const routes: Routes = [
     },
     {
         path:'bank',
-        loadComponent: () => import('./bank/bank.component').then(m => m.BankComponent)
+        loadComponent: () => import('./components/bank/bank.component').then(m => m.BankComponent)
     },
     {
         path: 'loan-apply',
-        loadComponent: () => import('./loan-apply/loan-apply.component').then(m => m.LoanApplyComponent)
+        loadComponent: () => import('./components/loan-apply/loan-apply.component').then(m => m.LoanApplyComponent)
     }
 
 ];

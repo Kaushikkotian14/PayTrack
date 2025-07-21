@@ -1,6 +1,10 @@
-from database import loan_collection
+from database import loan_collection,bank_collection
 from fastapi import HTTPException
 from bson import ObjectId
+
+def serialize_doc(doc):
+    doc["_id"] = str(doc["_id"])
+    return doc
 
 def apply_loan(data: dict):
     existing = loan_collection.find_one({
@@ -15,13 +19,24 @@ def apply_loan(data: dict):
         "status": "pending",
     })
 
-def get_pending_loans():
-    return list(loan_collection.find({"status": "pending"}))
+def find_user_by_phone(phone: int):
+    return [serialize_doc(doc) for doc in loan_collection.find({"phone": phone})]
 
+
+def get_all_users():
+    return [serialize_doc(doc) for doc in loan_collection.find()]
+
+def get_pending_loans():
+     return [serialize_doc(doc) for doc in loan_collection.find({"status": "pending"})]
+ 
 def approve_loan(loan_id: str, approved_by: str):
     result = loan_collection.update_one(
         {"_id": ObjectId(loan_id)},
-        {"$set": {"status": "approved", "approved_by": approved_by}}
+        {
+            "$set": {
+                "status": "approved"
+            }
+        }
     )
     if result.matched_count == 0:
         raise HTTPException(status_code=404, detail="Loan not found")
@@ -30,14 +45,12 @@ def approve_loan(loan_id: str, approved_by: str):
 def reject_loan(loan_id: str, rejected_by: str):
     result = loan_collection.update_one(
         {"_id": ObjectId(loan_id)},
-        {"$set": {"status": "rejected", "rejected_by": rejected_by}}
+        {
+            "$set": {
+                "status": "rejected"
+            }
+        }
     )
     if result.matched_count == 0:
         raise HTTPException(status_code=404, detail="Loan not found")
     return {"message": "Loan rejected successfully"}
-
-def find_user_by_phone(phone: int):
-    return list(loan_collection.find({"phone": phone}))
-
-def get_all_users():
-    return list(loan_collection.find({}))

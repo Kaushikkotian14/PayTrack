@@ -8,4 +8,6 @@ class LoanApplication(BaseModel):
     duration: int
     reason: str
     
+
+    
     
