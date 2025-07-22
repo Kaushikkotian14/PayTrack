@@ -11,6 +11,8 @@ ChartJS.register(...registerables);
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './dashboard.component.html',
+  styleUrls: ['./dashboard.component.css'],
+  providers: [DashboardService]
 })
 export class DashboardComponent implements OnInit, AfterViewInit {
   expenses: any[] = [];
@@ -19,7 +21,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   monthlyExpenses = 0;
   totalTransactions = 0;
   averageDaily = 0;
-  limitValue = 0;
+  balance = 0;
 
   
   constructor(private dashboardService: DashboardService) {}
@@ -27,7 +29,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   ngOnInit() {
   this.dashboardService.getBalance().subscribe({
     next: (balance) => {
-      this.limitValue = balance;
+      this.balance = balance;
+      
     }
    });
     this.loadExpenses();
@@ -71,7 +74,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         }
       }
     });
-
     this.averageDaily = currentDay > 0 ? Math.round(this.monthlyExpenses / currentDay) : 0;
   }
 
@@ -83,11 +85,15 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   renderMonthlyChart() {
+    const now = new Date();
+    const currentYear = now.getFullYear();
     const monthlyData = Array(12).fill(0);
     this.expenses.forEach(exp => {
       if (exp.date) {
         const [day, month, year] = exp.date.split('-').map(Number);
-        monthlyData[month - 1] += parseFloat(exp.amount) || 0;
+        if (year === currentYear) {
+          monthlyData[month - 1] += parseFloat(exp.amount) || 0;
+        }
       }
     });
 
@@ -112,9 +118,20 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   renderCategoryChart() {
     const categoryMap: { [key: string]: number } = {};
+    const now = new Date();
+    const currentMonth = now.getMonth();
+    const currentYear = now.getFullYear();
+
     this.expenses.forEach(exp => {
-      const category = exp.category || 'Others';
-      categoryMap[category] = (categoryMap[category] || 0) + (parseFloat(exp.amount) || 0);
+      if (exp.date) {
+        const [dayStr, monthStr, yearStr] = exp.date.split('-');
+        const month = parseInt(monthStr) - 1;
+        const year = parseInt(yearStr);
+        if (month === currentMonth && year === currentYear) {
+          const category = exp.category || 'Others';
+          categoryMap[category] = (categoryMap[category] || 0) + (parseFloat(exp.amount) || 0);
+        }
+      }
     });
 
     new ChartJS('categoryDoughnut', {
@@ -185,7 +202,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   renderLimitRadialChart() {
     const value = this.totalExpenses;
-    const max = this.limitValue;
+    const max = this.balance;
 
     new ChartJS('limitRadialChart', {
       type: 'doughnut',

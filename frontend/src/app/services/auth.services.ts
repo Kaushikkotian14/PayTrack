@@ -14,11 +14,13 @@ export interface User {
   username: string;
   phone: string;
   pan_no: string;
+  
 }
 
 export interface LoginResponse {
   access_token: string;
   token_type: string;
+  role: string;
   user: User;
 }
 
@@ -42,6 +44,7 @@ export class AuthService {
     return this.http.post<LoginResponse>(`${this.apiUrl}/login`, formData).pipe(
       tap(response => {
         localStorage.setItem('token', response.access_token);
+        localStorage.setItem('role', response.role);
         localStorage.setItem('user', JSON.stringify(response.user));
       })
     );
@@ -58,11 +61,13 @@ export class AuthService {
   isLoggedIn(): boolean {
     const token = localStorage.getItem('token');
     const user = localStorage.getItem('user');
+    const role = localStorage.getItem('role');
     return !!token && !!user;
   }
 
   logout(): void {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    localStorage.removeItem('role');
   }
 }

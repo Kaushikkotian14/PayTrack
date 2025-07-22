@@ -20,20 +20,21 @@ export class LoginComponent {
 
   constructor(private authService: AuthService,private router: Router) {}
 
-  login() {
-    if (this.username && this.password) {
-      this.authService.login(this.username, this.password).subscribe({
-        next: () => {
-          alert('Login successful:');
-          
+ login() {
+  if (this.username && this.password) {
+    this.authService.login(this.username, this.password).subscribe({
+      next: (response: any) => {
+        alert('Login successful');
+        if (response.role === 'user') {
           this.router.navigate(['/home']);
-         
-        },
-        error: () => {
-          alert('Login failed:');
+        } else {
+          this.router.navigate(['/bank']);
         }
-      });
-    }
+      },
+      error: () => {
+        alert('Login failed');
+      }
+    });
   }
 }
-        
+}

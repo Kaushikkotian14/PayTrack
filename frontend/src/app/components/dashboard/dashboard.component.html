@@ -4,8 +4,8 @@
    
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
       <div class="bg-white p-5 rounded-xl shadow-md">
-        <h3 class="text-gray-500 text-sm">Total Expenses</h3>
-        <p class="text-2xl font-bold text-blue-600">₹{{ totalExpenses }}</p>
+        <h3 class="text-gray-500 text-sm">Balance</h3>
+        <p class="text-2xl font-bold text-blue-600"> ₹{{ balance }}</p>
       </div>
       <div class="bg-white p-5 rounded-xl shadow-md">
         <h3 class="text-gray-500 text-sm">This Month</h3>
@@ -19,13 +19,13 @@
 
 
     <div class="bg-white p-4 rounded-xl shadow-md mb-6">
-      <h2 class="text-lg font-semibold text-gray-600 mb-3">Monthly Expense Chart</h2>
+      <h2 class="text-lg font-semibold text-gray-600 mb-3">Monthly Expense </h2>
       <canvas id="monthlyBarChart" height="60"></canvas>
     </div>
 
    
     <div class="bg-white p-4 rounded-xl shadow-md mb-6">
-      <h2 class="text-lg font-semibold text-gray-600 mb-3">Daily Expenses (Line Chart)</h2>
+      <h2 class="text-lg font-semibold text-gray-600 mb-3">Daily Expenses</h2>
       <canvas id="dailyLineChart" height="60"></canvas>
     </div>
 
@@ -41,7 +41,7 @@
         <div class="bg-white p-4 rounded-xl shadow-md">
             <h2 class="text-lg font-semibold text-gray-600 mb-3">Limit Tracker</h2>
             <div class="flex justify-center items-center" style="height: 180px;">
-                <canvas id="limitRadialChart" width="250" height="150" style="display:block;"></canvas>
+                <canvas id="limitRadialChart" width="550" height="150" style="display:block;"></canvas>
             </div>
         </div>
     </div>
