@@ -26,7 +26,9 @@ export class LoginComponent {
       next: (response: any) => {
         alert('Login successful');
         if (response.role === 'user') {
+         
           this.router.navigate(['/home']);
+          
         } else {
           this.router.navigate(['/bank']);
         }

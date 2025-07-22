@@ -30,6 +30,10 @@ def get_pending_loans():
      return [serialize_doc(doc) for doc in loan_collection.find({"status": "pending"})]
  
 def approve_loan(loan_id: str, approved_by: str):
+    loan = loan_collection.find_one({"_id": ObjectId(loan_id)})
+    if not loan:
+        raise HTTPException(status_code=404, detail="Loan not found")
+
     result = loan_collection.update_one(
         {"_id": ObjectId(loan_id)},
         {
@@ -40,6 +44,14 @@ def approve_loan(loan_id: str, approved_by: str):
     )
     if result.matched_count == 0:
         raise HTTPException(status_code=404, detail="Loan not found")
+
+    phone = loan.get("phone")
+    amount = loan.get("amount", 0)
+    bank_collection.update_one(
+        {"phone": phone},
+        {"$inc": {"balance": amount}}
+    )
+
     return {"message": "Loan approved successfully"}
 
 def reject_loan(loan_id: str, rejected_by: str):

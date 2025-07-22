@@ -14,9 +14,11 @@ import { AuthService } from '../../services/auth.services';
 })
 export class HeaderComponent {
   isLoggedIn: boolean = false;
+  userRole: string | null = null;
 
   constructor() {
     this.isLoggedIn = !!localStorage.getItem('token');
+    this.userRole = localStorage.getItem('role');
   }
    
   logout() {

@@ -1,7 +1,8 @@
 from fastapi import APIRouter, HTTPException, Depends
-from schemas.bank_schemas import BankAccount
-from services.bank_service import create_bank_account_service, transfer_money_service_phone
+from schemas.bank_schemas import BankAccount, BankAccountResponse
+from services.bank_service import create_bank_account_service, transfer_money_service_phone,get_bank_account_by_phone
 from utils.auth_utils import get_current_user
+from database import bank_collection
 
  
 router = APIRouter()
@@ -13,7 +14,10 @@ async def create_account(account: BankAccount):
         raise HTTPException(status_code=400, detail=result["error"])
     return result
 
-
+@router.get("/bank-account", response_model=BankAccountResponse)
+async def get_bank_account(current_user: dict = Depends(get_current_user)):
+    phone = current_user.get("phone")
+    return get_bank_account_by_phone(phone)
 
 @router.post("/transfer/phone")
 async def transfer_money_via_phone(

@@ -41,6 +41,10 @@ export class LoanService {
   return this.http.get(`${this.baseUrl}/user/${phone}`, { headers });
 }
 
+ createBankAccount(data: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/bank-account`, data, this.getAuthHeaders());
+  }
+
 
   getAllUsers(): Observable<any> {
     return this.http.get(`${this.baseUrl}/users`, this.getAuthHeaders());

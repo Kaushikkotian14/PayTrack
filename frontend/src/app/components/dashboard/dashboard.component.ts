@@ -201,7 +201,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   renderLimitRadialChart() {
-    const value = this.totalExpenses;
+    const value = this.monthlyExpenses;
     const max = this.balance;
 
     new ChartJS('limitRadialChart', {

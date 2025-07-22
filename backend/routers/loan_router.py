@@ -33,7 +33,7 @@ def get_user(phone: int, user: dict = Depends(require_role(["admin"]))):
     return search_user(phone)
 
 @router.get("/users")
-def get_all_users(user: dict = Depends(require_role(["admin"]))):
+def get_all_users(user: dict = Depends(require_role(["admin", "user"]))):
     return fetch_all_users()
 
 @router.get("/test-token")

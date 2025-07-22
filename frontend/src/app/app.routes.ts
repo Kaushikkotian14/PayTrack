@@ -34,6 +34,12 @@ export const routes: Routes = [
         data: { roles: ['admin'] }
     },
     {
+        path: 'create-account',
+        loadComponent: () => import('./components/admin/create-account/create-account.component').then(m => m.CreateAccountComponent),
+        canActivate: [authGuard],
+        data: { roles: ['admin'] }
+    },
+    {
         path: 'loan-apply',
         loadComponent: () => import('./components/loan-apply/loan-apply.component').then(m => m.LoanApplyComponent),
         canActivate: [authGuard],

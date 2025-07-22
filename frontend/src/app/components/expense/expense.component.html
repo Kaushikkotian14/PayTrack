@@ -44,7 +44,7 @@
       </div>
       
       <div class="flex items-center justify-between mt-5">
-        <span class="text-2xl font-extrabold text-green-600 drop-shadow-sm">₹{{expense.amount}}</span>
+        <span class="text-2xl font-extrabold text-red-600 drop-shadow-sm">-₹{{expense.amount}}</span>
         <div class="flex gap-2">
             <ng-container *ngIf="!expense.transaction_id">
             <button (click)="editExpense(expense)" class="bg-yellow-400 text-white px-3 py-1.5 rounded-lg hover:bg-yellow-500 transition font-semibold shadow border border-yellow-300 flex items-center gap-1">

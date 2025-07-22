@@ -5,7 +5,7 @@ def insert_expense(data: dict):
     return expense_collection.insert_one(data)
  
 def find_expenses_by_user(username: str):
-    return expense_collection.find({"user_id": username})
+    return expense_collection.find({"$or": [{"user_id": username}, {"to": username}]})
  
 def update_expense(expense_id: str, data: dict, username: str):
     return expense_collection.update_one({"_id": ObjectId(expense_id), "user_id": username}, {"$set": data})

@@ -20,3 +20,14 @@ class TransferModel(BaseModel):
     description: str
     category: str
     
+class BankAccountResponse(BaseModel):
+    account_number: str
+    AccountHolder: str
+    pan_no: str
+    phone: int
+    age: int
+    EmploymentStatus: str
+    email: str
+    account_type: str
+    address: str
+    balance: float

@@ -19,7 +19,7 @@ export class ExpenseComponent implements OnInit {
   searchText: string = '';
   errorMessage: string = '';
 
-  // New properties for add/edit functionality
+  
   showExpenseDialog = false;
   isEditing = false;
   currentExpenseId = '';
@@ -60,26 +60,23 @@ export class ExpenseComponent implements OnInit {
     });
   }
 
-  // FIXED: Search functionality
+
   filterExpenses(): void {
     console.log('Filtering with:', { category: this.selectedCategory, search: this.searchText }); // DEBUG
     
     this.filteredExpenses = this.expenses.filter(expense => {
-      // Category filter
+      
       const matchesCategory = !this.selectedCategory || expense.category === this.selectedCategory;
       
-      // Search filter - improved logic
+
       const searchTerm = this.searchText.trim().toLowerCase();
       const matchesSearch = !searchTerm || 
         (expense.description && expense.description.toLowerCase().includes(searchTerm)) ||
         (expense.to && expense.to.toLowerCase().includes(searchTerm));
       
-      console.log(`Expense: ${expense.description}, Category Match: ${matchesCategory}, Search Match: ${matchesSearch}`); // DEBUG
-      
       return matchesCategory && matchesSearch;
     });
     
-    console.log('Filtered expenses:', this.filteredExpenses.length); // DEBUG
     this.sortByDate();
   }
 
@@ -148,7 +145,7 @@ export class ExpenseComponent implements OnInit {
         amount: this.expenseData.amount
       };
 
-      // FIXED: Use the correct method name
+      
       this.expenseService.createExpense(newExpense).subscribe({
         next: () => {
           this.loadExpenses();

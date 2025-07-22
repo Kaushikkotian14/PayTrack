@@ -1,4 +1,5 @@
-from repositories.bank_repository import insert_bank_account, find_bank_by_phone, update_bank_balance
+from repositories.bank_repository import insert_bank_account, find_bank_by_phone, update_bank_balance, find_by_phone
+from schemas.bank_schemas import BankAccountResponse
 import random
 from datetime import datetime
 from repositories.auth_repository import get_user_by_phone
@@ -69,3 +70,24 @@ def transfer_money_service_phone(sender_phone: int, receiver_phone: int, amount:
     return {"msg": "Transfer successful", "amount": amount}
 
 
+def get_bank_account_by_phone(phone: int) -> BankAccountResponse:
+       
+    
+        bank_account = find_by_phone(phone)
+        
+        if not bank_account:
+          return {"msg": "Bank account not found"}
+        
+        return BankAccountResponse(
+            
+            account_number=bank_account.get("account_number", ""),
+            AccountHolder=bank_account.get("AccountHolder", ""),
+            pan_no=bank_account.get("pan_no", ""),
+            phone=bank_account.get("phone", 0),
+            age=bank_account.get("age", 0),
+            EmploymentStatus=bank_account.get("EmploymentStatus", ""),
+            email=bank_account.get("email", ""),
+            account_type=bank_account.get("account_type", ""),
+            address=bank_account.get("address", ""),
+            balance=bank_account.get("balance", 0.0)
+        )

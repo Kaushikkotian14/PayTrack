@@ -51,7 +51,6 @@ export class ExpenseService {
   }
 
   createExpense(expense: ExpenseCreate): Observable<Expense> {
-    console.log('Sending expense data:', expense);
     return this.http.post<Expense>(`${this.apiUrl}`, expense, { headers: this.getHeaders() }).pipe(
       catchError(this.handleError)
     );

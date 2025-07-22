@@ -22,4 +22,13 @@ def login(form_data: OAuth2PasswordRequestForm = Depends()):
     if not user:
         raise HTTPException(status_code=401, detail="Incorrect phone or password")
     token = create_access_token(data={"sub": user["username"], "role": user["role"]}, expires_delta=timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
-    return {"access_token": token, "token_type": "bearer"}
+    return {
+        "access_token": token, 
+        "token_type": "bearer", 
+        "role": user["role"],
+        "user": {
+            "username": user["username"],
+            "phone": user.get("phone", ""),
+            "pan_no": user.get("pan_no", "")
+        }
+    }
