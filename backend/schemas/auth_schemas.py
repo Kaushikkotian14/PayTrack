@@ -18,6 +18,7 @@ class Token(BaseModel):
     access_token: str
     token_type: str
     role: Optional[str] = None
+    user: Optional[User] = None
     
  
 class TokenData(BaseModel):

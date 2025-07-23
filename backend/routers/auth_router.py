@@ -28,7 +28,7 @@ def login(form_data: OAuth2PasswordRequestForm = Depends()):
         "role": user["role"],
         "user": {
             "username": user["username"],
-            "phone": user.get("phone", ""),
+            "phone": user.get("phone", 0),
             "pan_no": user.get("pan_no", "")
         }
     }

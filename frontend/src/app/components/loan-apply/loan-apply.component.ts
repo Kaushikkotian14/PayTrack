@@ -11,19 +11,43 @@ import { FormsModule } from '@angular/forms';
   imports: [CommonModule, FormsModule],
   providers: [LoanService]
 })
-export class LoanApplyComponent {
+export class LoanApplyComponent  {
   formData = {
-    username: '',
-    phone: '',
     amount: null,
-    pan: '',
     duration: null,
     reason: ''
 
   };
   success = '';
 
+  loans: any[] = [];  
+
   constructor(private loanService: LoanService) {}
+  
+
+  calculateInterestRate(): number {
+    let rate = 10;
+    if (this.formData.duration && this.formData.duration > 12) {
+      rate += 2;
+    }
+    if (this.formData.amount && this.formData.amount > 100000) {
+      rate += 1.5;
+    }
+    return rate;
+  }
+
+  calculateTotalRepayable(): number {
+    const principal = this.formData.amount || 0;
+    const rate = this.calculateInterestRate();
+    const duration = this.formData.duration || 0;
+    const interest = (principal * rate * duration) / (100 * 12); 
+    return +(principal + interest).toFixed(2);
+  }
+  calculateMonthlyInstallment(): number {
+    const totalRepayable = this.calculateTotalRepayable();
+    const duration = this.formData.duration || 1; 
+    return +(totalRepayable / duration).toFixed(2);
+  }
 
   applyLoan() {
     this.loanService.applyLoan(this.formData).subscribe(
@@ -37,4 +61,6 @@ export class LoanApplyComponent {
       }
     );
   }
+
+ 
 }

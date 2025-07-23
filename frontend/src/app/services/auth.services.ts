@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../environments/environment';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 export interface RegistrationData {
@@ -29,6 +29,9 @@ export interface LoginResponse {
 })
 export class AuthService {
   private apiUrl = environment.apiUrl;
+  // role: string | null = null;
+  role  = new BehaviorSubject<string>('');
+  role$: Observable<string> = this.role.asObservable();
 
   constructor(private http: HttpClient) { }
 

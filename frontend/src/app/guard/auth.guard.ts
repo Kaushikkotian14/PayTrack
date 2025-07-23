@@ -7,7 +7,7 @@ export const authGuard: CanActivateFn = (route) => {
   const expectedRole = route.data?.['role'];
 
   if (!token) {
-    alert('Please login to continue');
+   
     window.location.href = '/login';
     return false;
   }

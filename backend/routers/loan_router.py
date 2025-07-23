@@ -39,4 +39,4 @@ def get_all_users(user: dict = Depends(require_role(["admin", "user"]))):
 @router.get("/test-token")
 def test_token(user: dict = Depends(require_role(["admin","user"]))):
     user["_id"] = str(user["_id"])
-    return {"msg": "Token accepted", "user": user}
+    return {"msg": "Token accepted", "user": user,"role": user["role"]}

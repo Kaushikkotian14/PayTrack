@@ -43,13 +43,13 @@ export class ExpenseComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    
     this.loadExpenses();
   }
 
   loadExpenses(): void {
     this.expenseService.getExpenses('current_user').subscribe({
       next: (expenses) => {
-        console.log('Loaded expenses:', expenses); // DEBUG
         this.expenses = expenses;
         this.filterExpenses();
         this.sortByDate();
@@ -171,5 +171,11 @@ export class ExpenseComponent implements OnInit {
         }
       });
     }
+  }
+
+  isCurrentUser(expense:any):boolean{
+    const username:any = JSON.parse(localStorage.getItem('user') || '{}').username;
+
+    return expense.to === username;
   }
 }

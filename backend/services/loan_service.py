@@ -2,12 +2,16 @@ from repositories.loan_repository import (
     apply_loan, get_pending_loans, approve_loan,
     reject_loan, find_user_by_phone, get_all_users
 )
+from datetime import datetime
 
 
 
 def apply_new_loan(request, user):
     data_dict = dict(request)
     data_dict["applied_by"] =  user.get("username")
+    data_dict["phone"] = user.get("phone")
+    data_dict["pan"] = user.get("pan_no")
+    data_dict["doa"] = datetime.now().strftime("%d-%m-%Y")
     apply_loan(data_dict)
     return {"message": "Loan application submitted successfully"}
 

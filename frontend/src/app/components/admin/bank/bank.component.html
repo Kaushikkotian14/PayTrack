@@ -3,20 +3,24 @@
 <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow mb-8">
     <thead>
         <tr class="bg-gray-100">
+            <th class="py-2 px-4 border-b">Date of Application</th> 
             <th class="py-2 px-4 border-b">Name</th>
             <th class="py-2 px-4 border-b">Phone</th>
             <th class="py-2 px-4 border-b">Amount</th>
             <th class="py-2 px-4 border-b">PAN</th>
+            <th class="py-2 px-4 border-b">Duration</th>
             <th class="py-2 px-4 border-b">Reason</th>
             <th class="py-2 px-4 border-b">Action</th>
         </tr>
     </thead>
     <tbody>
         <tr *ngFor="let loan of loans" class="hover:bg-gray-50">
+            <td class="py-2 px-4 border-b">{{ loan.doa }}</td>
             <td class="py-2 px-4 border-b">{{ loan.applied_by }}</td>
             <td class="py-2 px-4 border-b">{{ loan.phone }}</td>
             <td class="py-2 px-4 border-b">{{ loan.amount }}</td>
             <td class="py-2 px-4 border-b">{{ loan.pan }}</td>
+            <td class="py-2 px-4 border-b">{{ loan.duration }} months</td>
             <td class="py-2 px-4 border-b">{{ loan.reason }}</td>
             <td class="py-2 px-4 border-b space-x-2">
                 <button (click)="approve(loan._id)" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">Approve</button>
