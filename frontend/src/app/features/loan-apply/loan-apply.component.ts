@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { LoanService } from '../../services/loan.service';
+import { LoanService } from '../../core/services/loan.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -16,11 +16,11 @@ export class LoanApplyComponent  {
     amount: null,
     duration: null,
     reason: ''
-
   };
   success = '';
 
-  loans: any[] = [];  
+  loans: any[] = [];
+  currentLoan: any = null;
 
   constructor(private loanService: LoanService) {}
   
@@ -62,5 +62,5 @@ export class LoanApplyComponent  {
     );
   }
 
- 
+  
 }

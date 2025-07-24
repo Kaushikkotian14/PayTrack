@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { LoanService } from '../../../services/loan.service';
+import { LoanService } from '../../../core/services/loan.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 @Component({

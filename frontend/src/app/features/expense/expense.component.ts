@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ExpenseService, Expense, ExpenseCreate } from '../../services/expense.service';
+import { ExpenseService, Expense, ExpenseCreate } from '../../core/services/expense.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -62,8 +62,6 @@ export class ExpenseComponent implements OnInit {
 
 
   filterExpenses(): void {
-    console.log('Filtering with:', { category: this.selectedCategory, search: this.searchText }); // DEBUG
-    
     this.filteredExpenses = this.expenses.filter(expense => {
       
       const matchesCategory = !this.selectedCategory || expense.category === this.selectedCategory;
@@ -175,7 +173,6 @@ export class ExpenseComponent implements OnInit {
 
   isCurrentUser(expense:any):boolean{
     const username:any = JSON.parse(localStorage.getItem('user') || '{}').username;
-
     return expense.to === username;
   }
 }

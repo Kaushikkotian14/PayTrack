@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { environment } from '../environments/environment';
+import { environment } from '../../environments/environment';
 
 export interface DashboardStats {
   totalMonthly: number;
@@ -39,7 +39,7 @@ export class HomeService {
     });
   }
 
-  // Get all expenses and calculate dashboard stats
+
   getDashboardStats(): Observable<DashboardStats> {
     return this.http.get<RecentTransaction[]>(`${this.apiUrl}/expense`, {
       headers: this.getHeaders()
@@ -48,7 +48,7 @@ export class HomeService {
     );
   }
 
-  // Get recent transactions (latest 5)
+
   getRecentTransactions(limit: number = 5): Observable<RecentTransaction[]> {
     return this.http.get<RecentTransaction[]>(`${this.apiUrl}/expense`, {
       headers: this.getHeaders()
@@ -61,31 +61,31 @@ export class HomeService {
     );
   }
 
-  // Calculate dashboard statistics from expenses
+  
   private calculateStats(expenses: RecentTransaction[]): DashboardStats {
     const currentDate = new Date();
     const currentMonth = currentDate.getMonth();
     const currentYear = currentDate.getFullYear();
     
-    // Filter expenses for current month
+    
     const currentMonthExpenses = expenses.filter(expense => {
       const expenseDate = new Date(expense.date);
       return expenseDate.getMonth() === currentMonth && 
              expenseDate.getFullYear() === currentYear;
     });
     
-    // Filter expenses for current year
+
     const currentYearExpenses = expenses.filter(expense => {
       const expenseDate = new Date(expense.date);
       return expenseDate.getFullYear() === currentYear;
     });
     
-    // Calculate totals
+
     const totalMonthly = currentMonthExpenses.reduce((sum, expense) => sum + expense.amount, 0);
     const totalYearly = currentYearExpenses.reduce((sum, expense) => sum + expense.amount, 0);
     const totalTransactions = expenses.length;
     
-    // Calculate daily average for current month
+    
     const daysInMonth = currentDate.getDate();
     const averageDaily = daysInMonth > 0 ? totalMonthly / daysInMonth : 0;
     
@@ -98,7 +98,7 @@ export class HomeService {
     };
   }
 
-  // Get monthly expense data for charts
+
   getMonthlyExpenses(year: number): Observable<any[]> {
     return this.http.get<RecentTransaction[]>(`${this.apiUrl}/expense`, {
       headers: this.getHeaders()
@@ -107,7 +107,7 @@ export class HomeService {
     );
   }
 
-  // Get category breakdown
+  
   getCategoryData(year?: number, month?: number): Observable<any[]> {
     return this.http.get<RecentTransaction[]>(`${this.apiUrl}/expense`, {
       headers: this.getHeaders()

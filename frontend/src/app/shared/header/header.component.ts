@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { RouterModule } from '@angular/router';
-import { AuthService } from '../../services/auth.services';
+import { AuthService } from '../../core/services/auth.services';
 
 @Component({
   selector: 'app-header',

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { LoanService } from '../../../services/loan.service';
+import { LoanService } from '../../../core/services/loan.service';
 
 @Component({
   selector: 'app-create-account',

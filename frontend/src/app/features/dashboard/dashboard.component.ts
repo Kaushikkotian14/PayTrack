@@ -1,7 +1,7 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { DashboardService } from '../../services/dashboard.service';
+import { DashboardService } from '../../core/services/dashboard.service';
 import { Chart as ChartJS, registerables } from 'chart.js';
 
 ChartJS.register(...registerables);
@@ -22,15 +22,14 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   totalTransactions = 0;
   averageDaily = 0;
   balance = 0;
+  username: any = JSON.parse(localStorage.getItem('user') || '{}').username;
 
-  
   constructor(private dashboardService: DashboardService) {}
 
   ngOnInit() {
   this.dashboardService.getBalance().subscribe({
     next: (balance) => {
-      this.balance = balance;
-      
+      this.balance = balance;  
     }
    });
     this.loadExpenses();
@@ -66,12 +65,16 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
     this.expenses.forEach(e => {
       const amount = parseFloat(e.amount) || 0;
+      
+     
+      if (e.user_id === this.username) {
       this.totalExpenses += amount;
       if (e.date) {
         const [day, month, year] = e.date.split('-').map(Number);
         if (month - 1 === currentMonth && year === currentYear) {
-          this.monthlyExpenses += amount;
+        this.monthlyExpenses += amount;
         }
+      }
       }
     });
     this.averageDaily = currentDay > 0 ? Math.round(this.monthlyExpenses / currentDay) : 0;
@@ -89,7 +92,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     const currentYear = now.getFullYear();
     const monthlyData = Array(12).fill(0);
     this.expenses.forEach(exp => {
-      if (exp.date) {
+      if (exp.date && exp.user_id === this.username) {
         const [day, month, year] = exp.date.split('-').map(Number);
         if (year === currentYear) {
           monthlyData[month - 1] += parseFloat(exp.amount) || 0;
@@ -127,7 +130,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         const [dayStr, monthStr, yearStr] = exp.date.split('-');
         const month = parseInt(monthStr) - 1;
         const year = parseInt(yearStr);
-        if (month === currentMonth && year === currentYear) {
+        if (month === currentMonth && year === currentYear && exp.user_id === this.username) {
           const category = exp.category || 'Others';
           categoryMap[category] = (categoryMap[category] || 0) + (parseFloat(exp.amount) || 0);
         }
@@ -164,7 +167,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     const currentYear = now.getFullYear();
 
     this.expenses.forEach(exp => {
-      if (exp.date) {
+      if (exp.date && exp.user_id === this.username) {
         const [dayStr, monthStr, yearStr] = exp.date.split('-');
         const day = parseInt(dayStr);
         const month = parseInt(monthStr) - 1;

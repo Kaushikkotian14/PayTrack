@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { PaymentService } from '../../services/payment.service';
+import { PaymentService } from '../../core/services/payment.service';
 import { DashboardComponent } from '../dashboard/dashboard.component';
 import{RouterLink} from '@angular/router';
 
@@ -43,6 +43,7 @@ export class HomeComponent {
       description: '',
       category: ''
     };
+     window.location.reload();
   }
 
   initiateTransfer() {
@@ -62,5 +63,7 @@ export class HomeComponent {
         }
       });
     }, 2000);
+    
   }
+ 
 }
