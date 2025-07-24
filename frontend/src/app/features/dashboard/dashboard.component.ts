@@ -81,13 +81,13 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   renderCharts() {
-    this.renderMonthlyChart();
-    this.renderCategoryChart();
-    this.renderDailyLineChart();
-    this.renderLimitRadialChart();
+    this.BarChart();
+    this.DoughnutChart();
+    this.LineChart();
+    this.RadialChart();
   }
 
-  renderMonthlyChart() {
+  BarChart() {
     const now = new Date();
     const currentYear = now.getFullYear();
     const monthlyData = Array(12).fill(0);
@@ -119,7 +119,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     });
   }
 
-  renderCategoryChart() {
+  DoughnutChart() {
     const categoryMap: { [key: string]: number } = {};
     const now = new Date();
     const currentMonth = now.getMonth();
@@ -160,7 +160,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     });
   }
 
-  renderDailyLineChart() {
+   LineChart() {
     const dailyTotals: { [day: number]: number } = {};
     const now = new Date();
     const currentMonth = now.getMonth();
@@ -203,7 +203,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     });
   }
 
-  renderLimitRadialChart() {
+  RadialChart() {
     const value = this.monthlyExpenses;
     const max = this.balance;
 

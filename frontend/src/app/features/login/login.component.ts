@@ -36,9 +36,9 @@ export class LoginComponent {
             }
           }, 250);
         },
-        error: () => {
+        error: (error) => {
           this.isLoading = false; 
-          alert('Login failed');
+          alert(error.error.detail);
         }
       });
     }

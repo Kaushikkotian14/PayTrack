@@ -21,7 +21,7 @@
             <div class="mb-5">
                 <label class="block text-gray-700 font-medium mb-2" for="pan_no">PAN Number</label>
                 <input id="pan_no" name="pan_no"  type="text" [(ngModel)]="registrationData.pan_no" required 
-                    placeholder="Enter your PAN number"
+                    placeholder="Enter your PAN number" pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}" maxlength="10"
                     class="w-full px-4 py-2 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition">
             </div>
             

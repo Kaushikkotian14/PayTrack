@@ -23,12 +23,12 @@ export class RegistrationComponent {
   onSubmit() {
     if (this.isFormValid()) {
       this.authService.register(this.registrationData).subscribe({
-        next: () => {
-          alert('Registration successful');
+        next: (response) => {
+          alert(response.detail);
           this.router.navigate(['/login']);
         },
-        error: () => {
-          alert('Registration failed');
+        error: (err) => {
+          alert(err.error.detail );
         }
       });
     }
@@ -36,7 +36,7 @@ export class RegistrationComponent {
 
   private isFormValid(): boolean {
     return this.registrationData.phone.length === 10 &&
-           this.registrationData.pan_no.length > 0 &&
+           this.registrationData.pan_no.length === 10 &&
            this.registrationData.password.length > 0;
   }
 }

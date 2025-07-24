@@ -6,11 +6,11 @@ from datetime import datetime
  
 def register_user(user):
     if get_user_by_phone(user.phone):
-        return {"error": "Phone number already registered"}
+        raise HTTPException(status_code=400, detail="Phone number already registered")
     if not check_user_bank_account(user.phone):
-        return {"error": "Phone number is not linked with bank account"}
+        raise HTTPException(status_code=400, detail="Bank account does not match with phone number")
     if not check_user(user.phone, user.pan_no):
-        return {"error": "Phone and PAN do not match in bank records"}
+        raise HTTPException(status_code=400, detail="PAN number does not match with bank account")
     bank_record = bank_collection.find_one({"phone": user.phone})
     if not bank_record or "AccountHolder" not in bank_record:
         raise HTTPException(status_code=400, detail="Username not found in bank record")
@@ -26,7 +26,7 @@ def register_user(user):
          "role": "user"
     }
     create_user(data)
-    return {"msg": "User registered successfully"}
+    raise HTTPException(status_code=201, detail="User registered successfully")
  
 
 def authenticate_user(username:str,  password: str):

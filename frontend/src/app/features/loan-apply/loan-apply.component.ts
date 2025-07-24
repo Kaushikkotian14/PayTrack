@@ -56,7 +56,7 @@ export class LoanApplyComponent  {
         alert(this.success);
       },
       err => {
-        this.success = 'Error occurred.';
+        this.success = 'Application not submitted.';
         alert(this.success);
       }
     );

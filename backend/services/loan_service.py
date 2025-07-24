@@ -3,6 +3,7 @@ from repositories.loan_repository import (
     reject_loan, find_user_by_phone, get_all_users
 )
 from datetime import datetime
+from fastapi import HTTPException
 
 
 
@@ -13,7 +14,7 @@ def apply_new_loan(request, user):
     data_dict["pan"] = user.get("pan_no")
     data_dict["doa"] = datetime.now().strftime("%d-%m-%Y")
     apply_loan(data_dict)
-    return {"message": "Loan application submitted successfully"}
+    raise HTTPException(status_code=201, detail="Loan application submitted successfully")
 
 def fetch_pending_loans():
     return get_pending_loans()

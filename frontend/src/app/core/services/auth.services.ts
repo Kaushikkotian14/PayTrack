@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 export interface RegistrationData {
@@ -30,10 +30,15 @@ export interface LoginResponse {
 export class AuthService {
   private apiUrl = environment.apiUrl;
   // role: string | null = null;
-  role  = new BehaviorSubject<string>('');
+  role  = new Subject<string>();
   role$: Observable<string> = this.role.asObservable();
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) { 
+    const storedRole = localStorage.getItem('role');
+    if (storedRole) {
+      this.role.next(storedRole);
+    }
+  }
 
   register(userData: RegistrationData): Observable<any> {
     return this.http.post(`${this.apiUrl}/register`, userData);
@@ -49,6 +54,7 @@ export class AuthService {
         localStorage.setItem('token', response.access_token);
         localStorage.setItem('role', response.role);
         localStorage.setItem('user', JSON.stringify(response.user));
+        this.role.next(response.role);
       })
     );
   }
