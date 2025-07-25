@@ -1,7 +1,7 @@
 import { ApplicationConfig } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { authInterceptorFn } from './interceptor/auth.interceptor';
+import { authInterceptorFn } from './core/interceptor/auth.interceptor';
 
 
 

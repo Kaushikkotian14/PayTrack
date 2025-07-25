@@ -7,7 +7,6 @@ export const authGuard: CanActivateFn = (route) => {
   const expectedRole = route.data?.['role'];
 
   if (!token) {
-   
     window.location.href = '/login';
     return false;
   }
@@ -18,12 +17,11 @@ export const authGuard: CanActivateFn = (route) => {
     return false;
   }
   
-   const isAuthenticated = !!token;
-    if (!isAuthenticated) {
+   const isAuthenticated = !token;
+    if (isAuthenticated) {
         return false;
     }
 
-   
     const roles = route.data['roles'] as Array<string>;
     if (roles && roles.length > 0) {
         const userRole = role ?? '';

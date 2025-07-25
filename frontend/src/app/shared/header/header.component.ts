@@ -1,4 +1,4 @@
-import { Component,OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { RouterModule } from '@angular/router';
@@ -8,31 +8,34 @@ import { AuthService } from '../../core/services/auth.services';
   selector: 'app-header',
   standalone: true,
   imports: [CommonModule, RouterOutlet, RouterModule ],
-  providers: [AuthService],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent  {
   isLoggedIn: boolean = false;
   userRole: string | null = null;
 
   constructor(private authService: AuthService) {
-    this.isLoggedIn = !!localStorage.getItem('token');
     this.userRole = localStorage.getItem('role');
+    
+      this.authService.role.subscribe(role => {
+      this.isLoggedIn = localStorage.getItem('token')? true : false;
+      this.userRole = role;
+  });
   }
 
-   ngOnInit() {
-     this.authService.role$.subscribe(role => {
-      this.userRole = role;
-      console.log('User role:', this.userRole);
-
-  });
+   isUser(): boolean {
+    const role = localStorage.getItem('role');
+    return role === 'user';
   }
    
   logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     localStorage.removeItem('role');
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('isLo');
+    
     this.isLoggedIn = false;
     window.location.reload(); 
   }

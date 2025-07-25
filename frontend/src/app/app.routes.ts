@@ -44,5 +44,9 @@ export const routes: Routes = [
         loadComponent: () => import('./features/loan-apply/loan-apply.component').then(m => m.LoanApplyComponent),
         canActivate: [authGuard],
         data: { roles: ['user'] }
+    },
+    {
+        path:'unauthorized',
+        loadComponent: () => import('./core/guard/unauthorized.component').then(m => m.UnauthorizedComponent)
     }
 ];

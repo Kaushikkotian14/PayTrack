@@ -7,8 +7,6 @@ from schemas.auth_schemas import UserRegister, Token
  
 router = APIRouter()
 
-
- 
 @router.post("/register")
 def register(user: UserRegister):
     result = register_user(user)
@@ -31,4 +29,5 @@ def login(form_data: OAuth2PasswordRequestForm = Depends()):
             "phone": user.get("phone", 0),
             "pan_no": user.get("pan_no", "")
         }
+        
     }
