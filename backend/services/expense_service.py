@@ -45,10 +45,11 @@ def get_expenses_service(username: str):
 def update_expense_service(expense_id: str, expense, username: str):
     try:
         data = {
+            "to": expense.to,
             "description": expense.description,
             "amount": expense.amount,
             "category": expense.category,
-            "date": datetime.now().strftime("%d-%m-%Y"),
+            "date": expense.date,
             "time": datetime.now().strftime("%H:%M:%S")
         }
         result = update_expense(expense_id, data, username)

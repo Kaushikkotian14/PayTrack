@@ -6,9 +6,10 @@ class ExpenseCreate(BaseModel):
     amount: float
     category: str
     to : Optional[str] = None
+    date:str
  
 class ExpenseResponse(ExpenseCreate):
-    date: str
+
     time: str
     user_id: str
     expense_id: Optional[str]

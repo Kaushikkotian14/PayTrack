@@ -10,36 +10,42 @@
             <h2 class="text-3xl font-extrabold text-blue-700 mb-1">Create Account</h2>
         </div>
         
-        <form (ngSubmit)="onSubmit()" #registrationForm="ngForm">
+        <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
             <div class="mb-5">
                 <label class="block text-gray-700 font-medium mb-2" for="phone" autofocus>Phone</label>
-                <input id="phone" name="phone" type="tel" pattern="[0-9]{10}"  maxlength="10"  [(ngModel)]="registrationData.phone" required placeholder="Enter your phone number" autofocus
-                    class="w-full px-4 py-2 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition" 
-                    >
+                <input id="phone" type="tel" maxlength="10" formControlName="phone" required placeholder="Enter your phone number" autofocus
+                    class="w-full px-4 py-2 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition">
+                <div *ngIf="registrationForm.get('phone')?.invalid && registrationForm.get('phone')?.touched" class="text-red-500 text-xs mt-1">
+                    Enter a valid 10-digit phone number.
+                </div>
             </div>
             
             <div class="mb-5">
                 <label class="block text-gray-700 font-medium mb-2" for="pan_no">PAN Number</label>
-                <input id="pan_no" name="pan_no"  type="text" [(ngModel)]="registrationData.pan_no" required 
-                    placeholder="Enter your PAN number" pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}" maxlength="10"
+                <input id="pan_no" type="text" formControlName="pan_no" required placeholder="Enter your PAN number" maxlength="10"
                     class="w-full px-4 py-2 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition">
+                <div *ngIf="registrationForm.get('pan_no')?.invalid && registrationForm.get('pan_no')?.touched" class="text-red-500 text-xs mt-1">
+                    Enter a valid PAN number.
+                </div>
             </div>
             
             <div class="mb-7">
                 <label class="block text-gray-700 font-medium mb-2" for="password">Password</label>
-                <input id="password" name="password" type="password" [(ngModel)]="registrationData.password" required  placeholder="Create a password"
+                <input id="password" type="password" formControlName="password" required placeholder="Create a password"
                     class="w-full px-4 py-2 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition">
+                <div *ngIf="registrationForm.get('password')?.invalid && registrationForm.get('password')?.touched" class="text-red-500 text-xs mt-1">
+                    Password is required.
+                </div>
             </div>
             
             <button 
-                type="submit" [disabled]="!registrationForm.form.valid"
+                type="submit" [disabled]="registrationForm.invalid"
                 class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-2.5 rounded-lg font-semibold shadow-md hover:from-blue-700 hover:to-purple-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"> Register </button>
         </form>
         
         <div class="mt-6 text-center">
             <span class="text-gray-500 text-sm">Already have an account?</span>
             <a [routerLink]="'/login'" class="text-blue-600 font-semibold hover:underline ml-1">Login</a>
-
         </div>
     </div>
 </div>

@@ -1,42 +1,46 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService, RegistrationData } from '../../core/services/auth.services';
 import { Router } from '@angular/router';
-import {RouterModule} from '@angular/router';
+import { RouterModule } from '@angular/router';
+
 @Component({
   selector: 'app-registration',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './registration.component.html',
   styleUrls: ['./registration.component.css']
 })
 export class RegistrationComponent {
-  registrationData: RegistrationData = {
-    phone: '',
-    pan_no: '',
-    password: ''
-  };
+  registrationForm: FormGroup;
 
-  constructor( private authService: AuthService, private router: Router ) {}
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router
+  ) {
+    this.registrationForm = this.fb.group({
+      phone: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
+      pan_no: ['', [Validators.required, Validators.pattern(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/i)]],
+      password: ['', [Validators.required]]
+    });
+  }
 
   onSubmit() {
-    if (this.isFormValid()) {
-      this.authService.register(this.registrationData).subscribe({
+    if (this.registrationForm.valid) {
+      const registrationData: RegistrationData = this.registrationForm.value;
+      this.authService.register(registrationData).subscribe({
         next: (response) => {
           alert(response.detail);
           this.router.navigate(['/login']);
         },
         error: (err) => {
-          alert(err.error.detail );
+          alert(err.error.detail);
         }
       });
+    } else {
+      this.registrationForm.markAllAsTouched();
     }
-  }
-
-  private isFormValid(): boolean {
-    return this.registrationData.phone.length === 10 &&
-           this.registrationData.pan_no.length === 10 &&
-           this.registrationData.password.length > 0;
   }
 }

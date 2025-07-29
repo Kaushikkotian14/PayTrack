@@ -20,14 +20,14 @@ export class CreateAccountComponent {
   ) {
     this.form = this.fb.group({
       name: ['', Validators.required],
-      pan_no: ['', Validators.required],
-      phone: [0, Validators.required],
-      email: ['', Validators.required],
+      pan_no: ['', [Validators.required, Validators.pattern(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/i)]],
+      phone: [null, [Validators.required, Validators.pattern(/^\d{10}$/)]],
+      email: ['', [Validators.required, Validators.email]],
       account_type: ['Savings', Validators.required],
       address: ['', Validators.required],
-      balance: [0, Validators.required],
+      balance: [null, Validators.required],
       employment_status: ['Yes', Validators.required],
-      age: [0, Validators.required]
+      age: [null, Validators.required]
     });
   }
 
@@ -35,9 +35,6 @@ export class CreateAccountComponent {
     if (this.form.valid) {
       const data = {
         ...this.form.value,
-        phone: parseInt(this.form.value.phone),
-        age: parseInt(this.form.value.age),
-        balance: parseFloat(this.form.value.balance)
       };
 
       this.loanService.createBankAccount(data).subscribe({
@@ -50,5 +47,9 @@ export class CreateAccountComponent {
         }
       });
     }
+    else {
+      this.form.markAllAsTouched();
+    }
   }
+  
 }
