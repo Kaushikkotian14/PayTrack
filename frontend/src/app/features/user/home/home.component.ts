@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { PaymentService } from '../../core/services/payment.service';
+import { HomeService } from '../../../core/services/home.service';
 import { DashboardComponent } from '../dashboard/dashboard.component';
 import{RouterLink} from '@angular/router';
 
@@ -27,7 +27,7 @@ export class HomeComponent {
     category: ''
   };
 
-  constructor(private paymentService: PaymentService) {}
+  constructor(private homeService: HomeService) {}
 
   openPaymentDialog() {
     this.showPaymentDialog = true;
@@ -51,7 +51,7 @@ export class HomeComponent {
     
     
     setTimeout(() => {
-      this.paymentService.sendPayment(this.transferRequest).subscribe({
+      this.homeService.sendPayment(this.transferRequest).subscribe({
         next: (response) => {
           this.isTransferring = false;
           this.transferComplete = true;

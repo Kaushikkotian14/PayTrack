@@ -5,7 +5,7 @@ import { HeaderComponent } from './shared/header/header.component';
 import { FooterComponent } from './shared/footer/footer.component';
 import { LoginComponent } from './features/login/login.component';
 import { RegistrationComponent } from './features/registration/registration.component';
-import { ExpenseComponent } from './features/expense/expense.component';
+import { ExpenseComponent } from './features/user/expense/expense.component';
 import { UnauthorizedComponent } from './core/guard/unauthorized.component';
 
 

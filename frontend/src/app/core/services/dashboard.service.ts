@@ -4,6 +4,29 @@ import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { map } from 'rxjs/operators';
 
+export interface Expense {
+  id: number;
+  amount: number;
+  description: string;
+  category: string;
+  date: string;
+  user_id: number;
+}
+
+export interface BankAccount {
+  AccountHolder: string;
+  pan_no: string;
+  phone: number;
+  email: string;
+  account_type: 'Savings' | 'Current'; 
+  address: string;
+  balance: number;
+  EmploymentStatus: 'Yes' | 'No';
+  age: number;
+}
+
+
+
 @Injectable({
   providedIn: 'root'
 })
@@ -21,37 +44,17 @@ export class DashboardService {
   }
   
   getBalance(): Observable<number> {
-    return this.http.get<any>(`${this.apiUrl}/bank-account`, {
+    return this.http.get<BankAccount>(`${this.apiUrl}/bank-account`, {
       headers: this.getHeaders()
     }).pipe(
       map(response => response.balance)
     );
   }
   
-  getExpenses(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/expense`, {
+  getExpenses(): Observable<Expense[]> {
+    return this.http.get<Expense[]>(`${this.apiUrl}/expense`, {
       headers: this.getHeaders()
     });
   }
 
-  
-  addExpense(expenseData: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/expense`, expenseData, {
-      headers: this.getHeaders()
-    });
-  }
-
-
-  updateExpense(expenseId: string, expenseData: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/expense/${expenseId}`, expenseData, {
-      headers: this.getHeaders()
-    });
-  }
-
-  
-  deleteExpense(expenseId: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/expense/${expenseId}`, {
-      headers: this.getHeaders()
-    });
-  }
 }

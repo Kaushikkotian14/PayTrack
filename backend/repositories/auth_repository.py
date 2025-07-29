@@ -21,3 +21,4 @@ def delete_user(username: str):
 
 def update_password(username: str, password: str):
     return user_collection.update_one({"username": username}, {"$set": {"hashed_password": password}})
+

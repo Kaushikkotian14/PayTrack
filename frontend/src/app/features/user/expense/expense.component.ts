@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ExpenseService, Expense, ExpenseCreate } from '../../core/services/expense.service';
+import { ExpenseService, Expense, ExpenseCreate } from '../../../core/services/expense.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -171,8 +171,9 @@ export class ExpenseComponent implements OnInit {
     }
   }
 
-  isCurrentUser(expense:any):boolean{
-    const username:any = JSON.parse(localStorage.getItem('user') || '{}').username;
+  isCurrentUser(expense: Expense): boolean {
+    const user = localStorage.getItem('user');
+    const username = user ? (JSON.parse(user) as { username: string }).username : '';
     return expense.to === username;
   }
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { DashboardService } from '../../core/services/dashboard.service';
+import { DashboardService,Expense } from '../../../core/services/dashboard.service';
 import { Chart as ChartJS, registerables } from 'chart.js';
 
 ChartJS.register(...registerables);
@@ -12,17 +12,16 @@ ChartJS.register(...registerables);
   imports: [CommonModule, FormsModule],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
-  providers: [DashboardService]
 })
 export class DashboardComponent implements OnInit, AfterViewInit {
-  expenses: any[] = [];
+  expenses: Expense[] = [];
   isLoading = false;
   totalExpenses = 0;
   monthlyExpenses = 0;
   totalTransactions = 0;
   averageDaily = 0;
   balance = 0;
-  username: any = JSON.parse(localStorage.getItem('user') || '{}').username;
+  username= JSON.parse(localStorage.getItem('user') || '{}').username;
 
   constructor(private dashboardService: DashboardService) {}
 
@@ -64,7 +63,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     const currentDay = now.getDate();
 
     this.expenses.forEach(e => {
-      const amount = parseFloat(e.amount) || 0;
+      const amount = e.amount || 0;
       
      
       if (e.user_id === this.username) {
@@ -95,7 +94,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       if (exp.date && exp.user_id === this.username) {
         const [day, month, year] = exp.date.split('-').map(Number);
         if (year === currentYear) {
-          monthlyData[month - 1] += parseFloat(exp.amount) || 0;
+          monthlyData[month - 1] += exp.amount || 0;
         }
       }
     });
@@ -132,7 +131,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         const year = parseInt(yearStr);
         if (month === currentMonth && year === currentYear && exp.user_id === this.username) {
           const category = exp.category || 'Others';
-          categoryMap[category] = (categoryMap[category] || 0) + (parseFloat(exp.amount) || 0);
+          categoryMap[category] = (categoryMap[category] || 0) + (exp.amount || 0);
         }
       }
     });
@@ -173,7 +172,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         const month = parseInt(monthStr) - 1;
         const year = parseInt(yearStr);
         if (month === currentMonth && year === currentYear) {
-          dailyTotals[day] = (dailyTotals[day] || 0) + (parseFloat(exp.amount) || 0);
+          dailyTotals[day] = (dailyTotals[day] || 0) + (exp.amount || 0);
         }
       }
     });

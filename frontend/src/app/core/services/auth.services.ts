@@ -16,6 +16,10 @@ export interface User {
   pan_no: string;
 }
  
+export interface RegistrationResponse {
+  detail: string;
+}
+
 export interface LoginResponse {
   access_token: string;
   token_type: string;
@@ -32,11 +36,11 @@ export class AuthService {
   private loginStatus = new BehaviorSubject<boolean>(!!localStorage.getItem('token'));
   loginStatus$ = this.loginStatus.asObservable();
  
- role = new EventEmitter<any>();
+ role = new EventEmitter<string>();
   constructor(private http: HttpClient) {}
  
-  register(userData: RegistrationData): Observable<any> {
-    return this.http.post(`${this.apiUrl}/register`, userData);
+  register(userData: RegistrationData): Observable<RegistrationResponse> {
+    return this.http.post<RegistrationResponse>(`${this.apiUrl}/register`, userData);
   }
  
   login(username: string, password: string): Observable<LoginResponse> {
@@ -61,7 +65,7 @@ export class AuthService {
     localStorage.removeItem('user');
     localStorage.removeItem('role');
     this.loginStatus.next(false);
-    this.role.next(null);
+    this.role.next('');
   }
  
   getCurrentUser(): User | null {

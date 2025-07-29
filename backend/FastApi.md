@@ -9,7 +9,7 @@ URL = 'mysql+pymysql://root:root@localhost/schema_name'
 To create virtual env:python -m venv myenv 
 to enter virtual env: myenv\Scripts\activate
 to install requirements:pip install -r requirements.txt
-freeze requirements: freeze > requirements.txt
+freeze requirements:pip freeze > requirements.txt
 
 Chart.js:npm install chart.js ng2-charts
 

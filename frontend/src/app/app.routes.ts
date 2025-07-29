@@ -17,13 +17,13 @@ export const routes: Routes = [
     },
     {
         path: 'expense',
-        loadComponent: () => import('./features/expense/expense.component').then(m => m.ExpenseComponent),
+        loadComponent: () => import('./features/user/expense/expense.component').then(m => m.ExpenseComponent),
         canActivate: [authGuard],
         data: { roles: ['user'] }
     },
     {
         path: 'home',
-        loadComponent: () => import('./features/home/home.component').then(m => m.HomeComponent),
+        loadComponent: () => import('./features/user/home/home.component').then(m => m.HomeComponent),
         canActivate: [authGuard],
         data: { roles: ['user'] }
     },
@@ -41,7 +41,7 @@ export const routes: Routes = [
     },
     {
         path: 'loan-apply',
-        loadComponent: () => import('./features/loan-apply/loan-apply.component').then(m => m.LoanApplyComponent),
+        loadComponent: () => import('./features/user/loan-apply/loan-apply.component').then(m => m.LoanApplyComponent),
         canActivate: [authGuard],
         data: { roles: ['user'] }
     },
