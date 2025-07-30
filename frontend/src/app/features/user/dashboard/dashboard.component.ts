@@ -2,6 +2,8 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DashboardService,Expense } from '../../../core/services/dashboard.service';
+import { AuthService } from 'src/app/core/services/auth.services';
+import { inject } from '@angular/core';
 import { Chart as ChartJS, registerables } from 'chart.js';
 
 ChartJS.register(...registerables);
@@ -13,7 +15,9 @@ ChartJS.register(...registerables);
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
 })
+
 export class DashboardComponent implements OnInit, AfterViewInit {
+  authService = inject(AuthService);
   expenses: Expense[] = [];
   isLoading = false;
   totalExpenses = 0;
@@ -21,7 +25,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   totalTransactions = 0;
   averageDaily = 0;
   balance = 0;
-  username= JSON.parse(localStorage.getItem('user') || '{}').username;
+  username= this.authService.getUsernameFromToken() || {};
 
   constructor(private dashboardService: DashboardService) {}
 
@@ -64,7 +68,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
     this.expenses.forEach(e => {
       const amount = e.amount || 0;
-      
      
       if (e.user_id === this.username) {
       this.totalExpenses += amount;

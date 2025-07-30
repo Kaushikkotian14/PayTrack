@@ -1,16 +1,18 @@
-import { Component } from '@angular/core';
+import { Component,OnInit } from '@angular/core';
 import { LoanService,Loan } from '../../../core/services/loan.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-loan-apply',
   standalone: true,
   templateUrl: './loan-apply.component.html',
   styleUrls: ['./loan-apply.component.css'],
-  imports: [CommonModule, FormsModule]
+  imports: [CommonModule, FormsModule, ReactiveFormsModule]
 })
-export class LoanApplyComponent  {
+export class LoanApplyComponent implements OnInit {
+  loanForm!: FormGroup;
   formData = {
     amount: null,
     duration: null,
@@ -18,8 +20,18 @@ export class LoanApplyComponent  {
   };
   success = '';
 
-  constructor(private loanService: LoanService) {}
+   constructor(private loanService: LoanService, private fb: FormBuilder) {} 
+
+    ngOnInit(): void {
+        this.loanForm = this.fb.group({
+            amount: [null, [Validators.required]],
+            duration: [null, [Validators.required]],
+            reason: ['', [Validators.required ]]
+        });
+    }
+
   
+
   calculateInterestRate(): number {
     let rate = 10;
     if (this.formData.duration && this.formData.duration > 12) {
@@ -41,11 +53,16 @@ export class LoanApplyComponent  {
   calculateMonthlyInstallment(): number {
     const totalRepayable = this.calculateTotalRepayable();
     const duration = this.formData.duration!; 
-    return +(totalRepayable / duration).toFixed(2);
+    return +(totalRepayable /( duration | 1)).toFixed(2);
   }
 
   applyLoan() {
-    this.loanService.applyLoan(this.formData).subscribe(
+    if (!this.loanForm.valid) {
+      this.loanForm.markAllAsTouched();
+      alert('Please fill all required fields correctly.');
+      return;
+    }
+    this.loanService.applyLoan(this.loanForm.value).subscribe(
       res => {
         this.success = 'Application submitted successfully!';
         alert(this.success);
@@ -56,6 +73,6 @@ export class LoanApplyComponent  {
       }
     );
   }
-
   
 }
+ 
