@@ -47,5 +47,7 @@ Monthly income/expenses
 MongoDB Collections likely include: users, accounts, transactions, loans.
 
 🧠 Backend Highlights:
+
 FastAPI routers handle
+
 Secure JWT token generation and validation
