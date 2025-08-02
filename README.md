@@ -1,5 +1,6 @@
 💰 PayTrack – Full Stack Loan & Expense Management System
 Built a role-based full-stack financial app using Angular (Tailwind), FastAPI, and MongoDB. Integrated JWT authentication, automated dashboards using Chart.js, and features like loan application, money transfer, and transaction search.
+
 🔧 Tech Stack:
 Frontend: Angular + Tailwind CSS
 
