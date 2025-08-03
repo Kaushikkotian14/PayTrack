@@ -1,4 +1,4 @@
-import { EventEmitter, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -37,7 +37,9 @@ export class AuthService {
   private loginStatus = new BehaviorSubject<boolean>(!!localStorage.getItem('token'));
   loginStatus$ = this.loginStatus.asObservable();
 
-  role = new EventEmitter<string>();
+  private userRole = new BehaviorSubject<string | null>(this.getRoleFromToken());
+  userRole$ = this.userRole.asObservable();
+
   constructor(private http: HttpClient) {}
 
   register(userData: RegistrationData): Observable<RegistrationResponse> {
@@ -53,15 +55,16 @@ export class AuthService {
       tap(response => {
         localStorage.setItem('token', response.access_token);
         this.loginStatus.next(true);
-        this.role.next(this.getRoleFromToken()!);
+        this.userRole.next(this.getRoleFromToken());
       })
     );
   }
 
   logout(): void {
     localStorage.removeItem('token');
+
     this.loginStatus.next(false);
-    this.role.next('');
+    this.userRole.next(null);
   }
 
   getRoleFromToken(): string | null {
@@ -85,6 +88,7 @@ export class AuthService {
       return null;
     }
   }
+
   getUserProfile(): Observable<User> {
     return this.http.get<User>(`${this.apiUrl}/me`);
   }

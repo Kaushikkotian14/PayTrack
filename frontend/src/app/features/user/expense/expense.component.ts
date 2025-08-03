@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ExpenseService, Expense, ExpenseCreate } from '../../../core/services/expense.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { AuthService } from  '../../../core/services/auth.services';
 
 @Component({
   selector: 'app-expense',
@@ -18,6 +19,8 @@ export class ExpenseComponent implements OnInit {
   selectedCategory: string = '';
   searchText: string = '';
   errorMessage: string = '';
+  username= this.authService.getUsernameFromToken() || {};
+
 
   
   showExpenseDialog = false;
@@ -32,7 +35,8 @@ export class ExpenseComponent implements OnInit {
     date: ''
   };
 
-  constructor(private expenseService: ExpenseService) {}
+  constructor(private expenseService: ExpenseService, private authService : AuthService) {}
+
 
   onSearchTextChange(): void {
     this.filterExpenses();
@@ -172,8 +176,6 @@ export class ExpenseComponent implements OnInit {
   }
 
   isCurrentUser(expense: Expense): boolean {
-    const user = localStorage.getItem('user');
-    const username = user ? (JSON.parse(user) as { username: string }).username : '';
-    return expense.to === username;
+    return expense.to === this.username;
   }
 }

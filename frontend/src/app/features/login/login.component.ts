@@ -22,24 +22,23 @@ export class LoginComponent {
     if (this.username && this.password) {
       this.isLoading = true; 
       
-      this.authService.login(this.username, this.password).subscribe({
-        next: (response: any) => {
-          this.authService.role.next(response.role);
-          setTimeout(() => {
-            this.isLoading = false; 
-            
-            if (response.role === 'user') {
-              this.router.navigate(['/home']);
-            } else {
-              this.router.navigate(['/bank']);
-            }
-          }, 250);
-        },
-        error: (error) => {
-          this.isLoading = false; 
-          alert(error.error.detail);
-        }
-      });
+     this.authService.login(this.username, this.password).subscribe({
+  next: (response: any) => {
+    this.isLoading = false;
+
+
+    if (response.role === 'user') {
+      this.router.navigate(['/home']);
+    } else {
+      this.router.navigate(['/bank']);
+    }
+  },
+  error: (error) => {
+    this.isLoading = false;
+    alert(error.error.detail);
+  }
+});
+
     }
   }
 }

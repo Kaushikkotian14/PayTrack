@@ -28,7 +28,7 @@
 
   <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
     <div *ngFor="let expense of filteredExpenses" class="bg-gradient-to-br from-white via-blue-50 to-white rounded-2xl shadow-lg p-6 hover:shadow-2xl transition border border-blue-100">
-      
+     
       <div class="flex items-center justify-between mb-3">
         <span class="text-sm text-gray-500 font-medium">{{expense.date}} <span *ngIf="expense.time">| {{expense.time}}</span></span>
         <span class="bg-blue-100 text-blue-700 text-xs px-3 py-1 rounded-full font-semibold border border-blue-200 shadow-sm">{{expense.category}}</span>
@@ -45,7 +45,7 @@
       
       <div class="flex items-center justify-between mt-5">
         <span *ngIf="!isCurrentUser(expense)" class="text-2xl font-extrabold text-red-600 drop-shadow-sm">-₹{{expense.amount}}</span>
-       <span *ngIf="isCurrentUser(expense)" class="text-2xl font-extrabold text-green-600 drop-shadow-sm">
+       <span *ngIf="isCurrentUser(expense) "  class="text-2xl font-extrabold text-green-600 drop-shadow-sm">
   +₹{{expense.amount}}
 </span>
         <div class="flex gap-2">
@@ -57,7 +57,7 @@
               <i class="fa fa-trash"></i>
             </button>
             </ng-container>
-         
+
         </div>
       </div>
     </div>
