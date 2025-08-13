@@ -32,34 +32,3 @@ For JWT token authentications:
 >pip install python-jose[cryptography]
 
 >pip install passlib[bcrypt]
-
-
-
-<!-- {
-  "username": "Amit",
-  "email": "amit123@gmail.com",
-  "phone": 9876543210,
-  "password": "Amit@123"
-}
-
-{
-  "username": "Priya",
-  "email": "priya.k@example.com",
-  "phone": 9123456789,
-  "password": "Priya2024"
-}
-
-{
-  "username": "Rohan",
-  "email": "rohan.mehta@gmail.com",
-  "phone": 8899776655,
-  "password": "Rohan@456"
-}
-
-{
-  "username": "Sneha",
-  "email": "sneha_92@example.com",
-  "phone": 9988776655,
-  "password": "SnehaPwd!"
-}
- -->
