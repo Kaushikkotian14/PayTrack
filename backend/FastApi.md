@@ -1,5 +1,8 @@
-To install Fast Api :pip install fastapi
+To install Fast Api :
+pip install fastapi
+
 To install uvicorn server:pip install uvicorn
+
 To run server : python -m uvicorn main:app --reload
 Default server: http://127.0.0.1:8000
 
